@@ -11,6 +11,13 @@
         input, select { font-weight: 300; }
         input::placeholder { color: #9ca3af; }
         input[type="date"] { display: block; -webkit-appearance: none; }
+        
+        /* Estilo extra para indicar visualmente que no se pueden editar */
+        input:read-only, select:disabled {
+            cursor: not-allowed;
+            background-color: #f3f4f6; /* gris más oscuro */
+            color: #6b7280;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900 flex flex-col min-h-screen">
@@ -73,54 +80,54 @@
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Nombre</label>
-                            <input type="text" id="nombre" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="text" id="nombre" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Apellido</label>
-                            <input type="text" id="apellido" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="text" id="apellido" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Teléfono</label>
-                            <input type="tel" id="telefono" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="tel" id="telefono" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Fecha de nacimiento</label>
-                            <input type="date" id="fecha_nacimiento" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50 text-gray-500">
+                            <input type="date" id="fecha_nacimiento" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100 text-gray-500">
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Email</label>
-                            <input type="email" id="email" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="email" id="email" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su email</label>
-                            <input type="email" id="email_confirm" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="email" id="email_confirm" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">DNI</label>
-                            <input type="text" id="dni" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="text" id="dni" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca su contraseña</label>
-                            <input type="password" id="password" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="password" id="password" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su contraseña</label>
-                            <input type="password" id="password_confirm" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="password" id="password_confirm" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Código postal</label>
-                            <input type="text" id="cp" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
+                            <input type="text" id="cp" readonly class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm bg-gray-100">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Género</label>
                             <div class="relative">
-                                <select id="genero" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm appearance-none bg-gray-50 text-gray-500">
+                                <select id="genero" disabled class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none text-sm appearance-none bg-gray-100 text-gray-500">
                                     <option value="">Selecciona</option>
                                     <option value="Hombre">Hombre</option>
                                     <option value="Mujer">Mujer</option>
