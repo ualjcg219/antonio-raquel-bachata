@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería - Antonio & Raquel Bachata Passion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Montserrat', sans-serif; }</style>
+</head>
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
+
+    <!-- HEADER -->
+    <header class="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2">
+                    <div class="relative group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-600 group-hover:scale-110 transition-transform duration-300"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] font-bold text-white">A&R</span>
+                    </div>
+                    <div class="flex flex-col leading-none">
+                        <span class="text-lg font-bold tracking-widest">ANTONIO&RAQUEL</span>
+                        <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-wider">
+                    <a href="cursos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Cursos</a>
+                    <a href="catalogo.html" class="text-gray-100 hover:text-rose-400 transition-colors">Catálogo</a>
+                    <a href="eventos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Eventos</a>
+                    <a href="nosotros.html" class="text-gray-100 hover:text-rose-400 transition-colors">¿Quiénes Somos?</a>
+                    <a href="galeria.html" class="text-rose-500 font-bold">Galería</a>
+                </nav>
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="carrito.html" class="relative hover:text-rose-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span class="absolute -top-2 -right-2 bg-rose-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                    <a href="login.html" class="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 px-4 py-2 rounded text-xs font-bold uppercase transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Iniciar Sesión
+                    </a>
+                </div>
+                <button class="md:hidden" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+            <nav id="mobile-menu" class="hidden md:hidden mt-4 flex flex-col gap-4 pb-4 border-t border-gray-800 pt-4">
+                <a href="cursos.html" class="block py-2 text-gray-100 hover:text-rose-500">Cursos</a>
+                <a href="catalogo.html" class="block py-2 text-gray-100 hover:text-rose-500">Catálogo</a>
+                <a href="eventos.html" class="block py-2 text-gray-100 hover:text-rose-500">Eventos</a>
+                <a href="nosotros.html" class="block py-2 text-gray-100 hover:text-rose-500">¿Quiénes Somos?</a>
+                <a href="galeria.html" class="block py-2 text-gray-100 hover:text-rose-500">Galería</a>
+                <div class="flex items-center gap-4 pt-4 border-t border-gray-800">
+                    <a href="login.html" class="flex-1 text-center bg-rose-600 text-white py-2 rounded font-bold">Login</a>
+                    <a href="registro.html" class="flex-1 text-center border border-white text-white py-2 rounded font-bold">Registro</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="flex-grow py-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-black uppercase tracking-tight mb-4">Galería</h1>
+                <div class="h-1 w-24 bg-rose-600 mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[200px]">
+                <!-- Large Item -->
+                <div class="md:col-span-2 md:row-span-2 relative group overflow-hidden rounded-xl cursor-pointer">
+                    <img src="https://picsum.photos/800/800?random=60" alt="Gallery 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300"></div>
+                </div>
+
+                <!-- Tall Item -->
+                <div class="md:row-span-2 relative group overflow-hidden rounded-xl cursor-pointer">
+                    <img src="https://picsum.photos/400/800?random=61" alt="Gallery 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+
+                <!-- Standard Items -->
+                <div class="relative group overflow-hidden rounded-xl cursor-pointer">
+                    <img src="https://picsum.photos/400/400?random=62" alt="Gallery 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+
+                <div class="relative group overflow-hidden rounded-xl cursor-pointer">
+                    <img src="https://picsum.photos/400/400?random=63" alt="Gallery 4" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+
+                <div class="md:col-span-2 relative group overflow-hidden rounded-xl cursor-pointer">
+                    <img src="https://picsum.photos/800/400?random=64" alt="Gallery 5" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+                
+                <div class="relative group overflow-hidden rounded-xl cursor-pointer">
+                    <img src="https://picsum.photos/400/400?random=65" alt="Gallery 6" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white pt-8 pb-8 border-t border-gray-800">
+        <div class="container mx-auto px-4 text-center text-xs text-gray-600">
+            &copy; 2025 Antonio & Raquel Bachata Passion.
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+    </script>
+</body>
+</html>
