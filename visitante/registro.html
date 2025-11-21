@@ -11,6 +11,12 @@
         input, select { font-weight: 300; }
         input::placeholder { color: #9ca3af; }
         input[type="date"] { display: block; -webkit-appearance: none; }
+        
+        /* Clase para marcar borde rojo en error (se aplica vía JS) */
+        .input-error {
+            border-color: #e11d48 !important; /* rose-600 */
+            background-color: #fff1f2; /* rose-50 */
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900 flex flex-col min-h-screen">
@@ -65,60 +71,70 @@
     <main class="flex-grow flex items-center justify-center py-12 px-4 md:px-12">
         <div class="w-full max-w-6xl border-[3px] border-rose-600 p-6 md:p-12 rounded-sm bg-white relative">
             
-            <form id="registerForm">
+            <form id="registerForm" novalidate>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mb-12">
                     
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Nombre</label>
-                            <input type="text" id="nombre" placeholder="Ej: Antonio Jesús" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="nombre" placeholder="Ej: Antonio Jesús" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-nombre" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Apellido</label>
-                            <input type="text" id="apellido" placeholder="Ej: Castillo López" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="apellido" placeholder="Ej: Castillo López" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-apellido" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Teléfono</label>
-                            <input type="tel" id="telefono" placeholder="Ej: 123456789" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="tel" id="telefono" placeholder="Ej: 123456789" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-telefono" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Fecha de nacimiento</label>
-                            <input type="date" id="fecha_nacimiento" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white text-gray-500 placeholder-gray-400">
+                            <input type="date" id="fecha_nacimiento" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white text-gray-500 placeholder-gray-400 transition-colors">
+                            <p id="error-fecha_nacimiento" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Email</label>
-                            <input type="email" id="email" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="email" id="email" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-email" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su email</label>
-                            <input type="email" id="email_confirm" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="email" id="email_confirm" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-email_confirm" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">DNI</label>
-                            <input type="text" id="dni" placeholder="12345678A" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="dni" placeholder="12345678A" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-dni" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca su contraseña</label>
-                            <input type="password" id="password" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="password" id="password" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-password" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su contraseña</label>
-                            <input type="password" id="password_confirm" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="password" id="password_confirm" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-password_confirm" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Código postal</label>
-                            <input type="text" id="cp" placeholder="Ej: 04130" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="cp" placeholder="Ej: 04130" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-cp" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Género</label>
                             <div class="relative">
-                                <select id="genero" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm appearance-none bg-white text-gray-500">
+                                <select id="genero" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm appearance-none bg-white text-gray-500 transition-colors">
                                     <option value="">Selecciona</option>
                                     <option value="Hombre">Hombre</option>
                                     <option value="Mujer">Mujer</option>
@@ -128,6 +144,7 @@
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                 </div>
                             </div>
+                            <p id="error-genero" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
                         </div>
                     </div>
                 </div>
@@ -154,42 +171,76 @@
     <script>
         function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
-        // 1. Al cargar la página, miramos si hay datos guardados
+        // Recuperar datos al cargar
         document.addEventListener('DOMContentLoaded', function() {
             const savedData = localStorage.getItem('registroTemp');
             if(savedData) {
                 const data = JSON.parse(savedData);
-                document.getElementById('nombre').value = data.nombre || '';
-                document.getElementById('apellido').value = data.apellido || '';
-                document.getElementById('telefono').value = data.telefono || '';
-                document.getElementById('fecha_nacimiento').value = data.fecha_nacimiento || '';
-                document.getElementById('email').value = data.email || '';
-                document.getElementById('email_confirm').value = data.email_confirm || '';
-                document.getElementById('dni').value = data.dni || '';
-                document.getElementById('password').value = data.password || '';
-                document.getElementById('password_confirm').value = data.password_confirm || '';
-                document.getElementById('cp').value = data.cp || '';
-                document.getElementById('genero').value = data.genero || '';
+                ['nombre','apellido','telefono','fecha_nacimiento','email','email_confirm','dni','password','password_confirm','cp','genero'].forEach(id => {
+                     if(document.getElementById(id)) document.getElementById(id).value = data[id] || '';
+                });
             }
         });
 
-        // 2. Al enviar, guardamos los datos y vamos a la página 2
+        // Validación y envío
         document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
+            e.preventDefault();
+            
+            // Lista de IDs a validar
+            const fields = ['nombre', 'apellido', 'telefono', 'fecha_nacimiento', 'email', 'email_confirm', 'dni', 'password', 'password_confirm', 'cp', 'genero'];
+            let hasErrors = false;
 
-            const formData = {
-                nombre: document.getElementById('nombre').value,
-                apellido: document.getElementById('apellido').value,
-                telefono: document.getElementById('telefono').value,
-                fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
-                email: document.getElementById('email').value,
-                email_confirm: document.getElementById('email_confirm').value,
-                dni: document.getElementById('dni').value,
-                password: document.getElementById('password').value,
-                password_confirm: document.getElementById('password_confirm').value,
-                cp: document.getElementById('cp').value,
-                genero: document.getElementById('genero').value
-            };
+            // 1. Limpiar errores previos
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                const errorMsg = document.getElementById('error-' + id);
+                input.classList.remove('input-error');
+                errorMsg.classList.add('hidden');
+            });
+
+            // 2. Validar campos vacíos
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                const errorMsg = document.getElementById('error-' + id);
+                
+                if (!input.value.trim()) {
+                    input.classList.add('input-error');
+                    errorMsg.innerText = "Este campo es obligatorio";
+                    errorMsg.classList.remove('hidden');
+                    hasErrors = true;
+                }
+            });
+
+            // 3. Validar Coincidencias (solo si no están vacíos)
+            const email = document.getElementById('email');
+            const emailConfirm = document.getElementById('email_confirm');
+            
+            if(email.value && emailConfirm.value && email.value !== emailConfirm.value) {
+                emailConfirm.classList.add('input-error');
+                const errorMsg = document.getElementById('error-email_confirm');
+                errorMsg.innerText = "Los emails no coinciden";
+                errorMsg.classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            const pass = document.getElementById('password');
+            const passConfirm = document.getElementById('password_confirm');
+
+            if(pass.value && passConfirm.value && pass.value !== passConfirm.value) {
+                passConfirm.classList.add('input-error');
+                const errorMsg = document.getElementById('error-password_confirm');
+                errorMsg.innerText = "Las contraseñas no coinciden";
+                errorMsg.classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return; // Si hay errores, paramos aquí.
+
+            // 4. Guardar y continuar
+            const formData = {};
+            fields.forEach(id => {
+                formData[id] = document.getElementById(id).value;
+            });
 
             localStorage.setItem('registroTemp', JSON.stringify(formData));
             window.location.href = 'registro2.html';
