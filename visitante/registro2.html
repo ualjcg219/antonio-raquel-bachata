@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Antonio & Raquel Bachata Passion</title>
+    <title>Confirmar Registro - Antonio & Raquel Bachata Passion</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -65,60 +65,62 @@
     <main class="flex-grow flex items-center justify-center py-12 px-4 md:px-12">
         <div class="w-full max-w-6xl border-[3px] border-rose-600 p-6 md:p-12 rounded-sm bg-white relative">
             
-            <form id="registerForm">
+            <h2 class="text-xl font-bold text-center mb-6 uppercase text-gray-700">Confirmar Datos</h2>
+
+            <form id="confirmForm">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mb-12">
                     
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Nombre</label>
-                            <input type="text" id="nombre" placeholder="Ej: Antonio Jesús" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="nombre" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Apellido</label>
-                            <input type="text" id="apellido" placeholder="Ej: Castillo López" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="apellido" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Teléfono</label>
-                            <input type="tel" id="telefono" placeholder="Ej: 123456789" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="tel" id="telefono" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Fecha de nacimiento</label>
-                            <input type="date" id="fecha_nacimiento" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white text-gray-500 placeholder-gray-400">
+                            <input type="date" id="fecha_nacimiento" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50 text-gray-500">
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Email</label>
-                            <input type="email" id="email" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="email" id="email" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su email</label>
-                            <input type="email" id="email_confirm" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="email" id="email_confirm" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">DNI</label>
-                            <input type="text" id="dni" placeholder="12345678A" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="dni" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                     </div>
 
                     <div class="space-y-6">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca su contraseña</label>
-                            <input type="password" id="password" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="password" id="password" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su contraseña</label>
-                            <input type="password" id="password_confirm" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="password" id="password_confirm" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Código postal</label>
-                            <input type="text" id="cp" placeholder="Ej: 04130" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white">
+                            <input type="text" id="cp" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-gray-50">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Género</label>
                             <div class="relative">
-                                <select id="genero" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm appearance-none bg-white text-gray-500">
+                                <select id="genero" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm appearance-none bg-gray-50 text-gray-500">
                                     <option value="">Selecciona</option>
                                     <option value="Hombre">Hombre</option>
                                     <option value="Mujer">Mujer</option>
@@ -133,12 +135,12 @@
                 </div>
 
                 <div class="flex justify-between items-center mt-12">
-                    <button type="button" onclick="window.history.back()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded text-lg shadow-md transition-colors">
-                        Cancelar
-                    </button>
+                    <a href="registro.html" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded text-lg shadow-md transition-colors">
+                        Volver
+                    </a>
                     
-                    <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-8 rounded text-lg shadow-md transition-colors">
-                        Siguiente
+                    <button type="button" onclick="alert('¡Registro completado con éxito! (Simulación)')" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-8 rounded text-lg shadow-md transition-colors uppercase">
+                        Regístrate
                     </button>
                 </div>
             </form>
@@ -154,9 +156,9 @@
     <script>
         function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
 
-        // 1. Al cargar la página, miramos si hay datos guardados
         document.addEventListener('DOMContentLoaded', function() {
             const savedData = localStorage.getItem('registroTemp');
+            
             if(savedData) {
                 const data = JSON.parse(savedData);
                 document.getElementById('nombre').value = data.nombre || '';
@@ -171,28 +173,6 @@
                 document.getElementById('cp').value = data.cp || '';
                 document.getElementById('genero').value = data.genero || '';
             }
-        });
-
-        // 2. Al enviar, guardamos los datos y vamos a la página 2
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
-
-            const formData = {
-                nombre: document.getElementById('nombre').value,
-                apellido: document.getElementById('apellido').value,
-                telefono: document.getElementById('telefono').value,
-                fecha_nacimiento: document.getElementById('fecha_nacimiento').value,
-                email: document.getElementById('email').value,
-                email_confirm: document.getElementById('email_confirm').value,
-                dni: document.getElementById('dni').value,
-                password: document.getElementById('password').value,
-                password_confirm: document.getElementById('password_confirm').value,
-                cp: document.getElementById('cp').value,
-                genero: document.getElementById('genero').value
-            };
-
-            localStorage.setItem('registroTemp', JSON.stringify(formData));
-            window.location.href = 'registro2.html';
         });
     </script>
 </body>
