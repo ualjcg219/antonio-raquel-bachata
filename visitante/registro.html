@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Antonio & Raquel Bachata Passion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        input, select { font-weight: 300; }
+        input::placeholder { color: #9ca3af; }
+        input[type="date"] { display: block; -webkit-appearance: none; }
+        
+        /* Clase para marcar borde rojo en error (se aplica vía JS) */
+        .input-error {
+            border-color: #e11d48 !important; /* rose-600 */
+            background-color: #fff1f2; /* rose-50 */
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
+
+    <header class="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2">
+                    <div class="relative group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-600 group-hover:scale-110 transition-transform duration-300"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                        <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] font-bold text-white">A&R</span>
+                    </div>
+                    <div class="flex flex-col leading-none">
+                        <span class="text-lg font-bold tracking-widest">ANTONIO&RAQUEL</span>
+                        <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-wider">
+                    <a href="cursos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Cursos</a>
+                    <a href="catalogo.html" class="text-gray-100 hover:text-rose-400 transition-colors">Catálogo</a>
+                    <a href="eventos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Eventos</a>
+                    <a href="nosotros.html" class="text-gray-100 hover:text-rose-400 transition-colors">¿Quiénes Somos?</a>
+                    <a href="galeria.html" class="text-gray-100 hover:text-rose-400 transition-colors">Galería</a>
+                </nav>
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="carrito.html" class="relative hover:text-rose-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span class="absolute -top-2 -right-2 bg-rose-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                    <a href="login.html" class="flex items-center gap-2 bg-rose-600 px-4 py-2 rounded text-xs font-bold uppercase transition-colors hover:bg-rose-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Iniciar Sesión
+                    </a>
+                </div>
+                <button class="md:hidden" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+            <nav id="mobile-menu" class="hidden md:hidden mt-4 flex flex-col gap-4 pb-4 border-t border-gray-800 pt-4">
+                <a href="cursos.html" class="block py-2 text-gray-100 hover:text-rose-500">Cursos</a>
+                <a href="catalogo.html" class="block py-2 text-gray-100 hover:text-rose-500">Catálogo</a>
+                <a href="eventos.html" class="block py-2 text-gray-100 hover:text-rose-500">Eventos</a>
+                <a href="nosotros.html" class="block py-2 text-gray-100 hover:text-rose-500">¿Quiénes Somos?</a>
+                <a href="galeria.html" class="block py-2 text-gray-100 hover:text-rose-500">Galería</a>
+                <div class="flex items-center gap-4 pt-4 border-t border-gray-800">
+                    <a href="login.html" class="flex-1 text-center bg-rose-600 text-white py-2 rounded font-bold">Login</a>
+                    <a href="registro.html" class="flex-1 text-center border border-white text-white py-2 rounded font-bold">Registro</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-12 px-4 md:px-12">
+        <div class="w-full max-w-6xl border-[3px] border-rose-600 p-6 md:p-12 rounded-sm bg-white relative">
+            
+            <form id="registerForm" novalidate>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mb-12">
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Nombre</label>
+                            <input type="text" id="nombre" placeholder="Ej: Antonio Jesús" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-nombre" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Apellido</label>
+                            <input type="text" id="apellido" placeholder="Ej: Castillo López" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-apellido" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Teléfono</label>
+                            <input type="tel" id="telefono" placeholder="Ej: 123456789" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-telefono" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Fecha de nacimiento</label>
+                            <input type="date" id="fecha_nacimiento" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white text-gray-500 placeholder-gray-400 transition-colors">
+                            <p id="error-fecha_nacimiento" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Email</label>
+                            <input type="email" id="email" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-email" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su email</label>
+                            <input type="email" id="email_confirm" placeholder="Ej: correoinventado@gmail.com" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-email_confirm" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">DNI</label>
+                            <input type="text" id="dni" placeholder="12345678A" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-dni" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca su contraseña</label>
+                            <input type="password" id="password" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-password" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Introduzca de nuevo su contraseña</label>
+                            <input type="password" id="password_confirm" placeholder="miContraseña1234" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-password_confirm" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Código postal</label>
+                            <input type="text" id="cp" placeholder="Ej: 04130" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm bg-white transition-colors">
+                            <p id="error-cp" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-2 ml-1">Género</label>
+                            <div class="relative">
+                                <select id="genero" class="w-full border border-gray-300 rounded px-4 py-3 focus:outline-none focus:border-rose-500 text-sm appearance-none bg-white text-gray-500 transition-colors">
+                                    <option value="">Selecciona</option>
+                                    <option value="Hombre">Hombre</option>
+                                    <option value="Mujer">Mujer</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                            </div>
+                            <p id="error-genero" class="hidden text-[10px] font-bold text-rose-600 mt-1">Este campo es obligatorio</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-12">
+                    <button type="button" onclick="window.history.back()" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 px-8 rounded text-lg shadow-md transition-colors">
+                        Cancelar
+                    </button>
+                    
+                    <button type="submit" class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 px-8 rounded text-lg shadow-md transition-colors">
+                        Siguiente
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white pt-8 pb-8 border-t border-gray-800">
+        <div class="container mx-auto px-4 text-center text-xs text-gray-600">
+            &copy; 2025 Antonio & Raquel Bachata Passion.
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+
+        // Recuperar datos al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedData = localStorage.getItem('registroTemp');
+            if(savedData) {
+                const data = JSON.parse(savedData);
+                ['nombre','apellido','telefono','fecha_nacimiento','email','email_confirm','dni','password','password_confirm','cp','genero'].forEach(id => {
+                     if(document.getElementById(id)) document.getElementById(id).value = data[id] || '';
+                });
+            }
+        });
+
+        // Validación y envío
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Lista de IDs a validar
+            const fields = ['nombre', 'apellido', 'telefono', 'fecha_nacimiento', 'email', 'email_confirm', 'dni', 'password', 'password_confirm', 'cp', 'genero'];
+            let hasErrors = false;
+
+            // 1. Limpiar errores previos
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                const errorMsg = document.getElementById('error-' + id);
+                input.classList.remove('input-error');
+                errorMsg.classList.add('hidden');
+            });
+
+            // 2. Validar campos vacíos
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                const errorMsg = document.getElementById('error-' + id);
+                
+                if (!input.value.trim()) {
+                    input.classList.add('input-error');
+                    errorMsg.innerText = "Este campo es obligatorio";
+                    errorMsg.classList.remove('hidden');
+                    hasErrors = true;
+                }
+            });
+
+            // 3. Validar Coincidencias (solo si no están vacíos)
+            const email = document.getElementById('email');
+            const emailConfirm = document.getElementById('email_confirm');
+            
+            if(email.value && emailConfirm.value && email.value !== emailConfirm.value) {
+                emailConfirm.classList.add('input-error');
+                const errorMsg = document.getElementById('error-email_confirm');
+                errorMsg.innerText = "Los emails no coinciden";
+                errorMsg.classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            const pass = document.getElementById('password');
+            const passConfirm = document.getElementById('password_confirm');
+
+            if(pass.value && passConfirm.value && pass.value !== passConfirm.value) {
+                passConfirm.classList.add('input-error');
+                const errorMsg = document.getElementById('error-password_confirm');
+                errorMsg.innerText = "Las contraseñas no coinciden";
+                errorMsg.classList.remove('hidden');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return; // Si hay errores, paramos aquí.
+
+            // 4. Guardar y continuar
+            const formData = {};
+            fields.forEach(id => {
+                formData[id] = document.getElementById(id).value;
+            });
+
+            localStorage.setItem('registroTemp', JSON.stringify(formData));
+            window.location.href = 'registro2.html';
+        });
+    </script>
+</body>
+</html>
