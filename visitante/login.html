@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Título de la página - Antonio & Raquel Bachata Passion</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="config.js"></script>
+    </head>
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
+
+    <header class="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2">
+                    <div class="relative group">
+                        <img src="tu-imagen.png" alt="Logo Antonio y Raquel" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300">
+                    </div>
+                    <div class="flex flex-col leading-none">
+                        <span class="text-lg font-bold tracking-widest">ANTONIO&RAQUEL</span>
+                        <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-wider">
+                    <a href="cursos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Cursos</a>
+                    <a href="catalogo.html" class="text-gray-100 hover:text-rose-400 transition-colors">Catálogo</a>
+                    <a href="eventos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Eventos</a>
+                    <a href="nosotros.html" class="text-gray-100 hover:text-rose-400 transition-colors">¿Quiénes Somos?</a>
+                    <a href="galeria.html" class="text-gray-100 hover:text-rose-400 transition-colors">Galería</a>
+                </nav>
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="carrito.html" class="relative hover:text-rose-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span class="absolute -top-2 -right-2 bg-rose-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                    <a href="login.html" class="flex items-center gap-2 bg-rose-600 px-4 py-2 rounded text-xs font-bold uppercase transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Iniciar Sesión
+                    </a>
+                </div>
+                <button class="md:hidden" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+            <nav id="mobile-menu" class="hidden md:hidden mt-4 flex flex-col gap-4 pb-4 border-t border-gray-800 pt-4">
+                <a href="cursos.html" class="block py-2 text-gray-100 hover:text-rose-500">Cursos</a>
+                <a href="catalogo.html" class="block py-2 text-gray-100 hover:text-rose-500">Catálogo</a>
+                <a href="eventos.html" class="block py-2 text-gray-100 hover:text-rose-500">Eventos</a>
+                <a href="nosotros.html" class="block py-2 text-gray-100 hover:text-rose-500">¿Quiénes Somos?</a>
+                <a href="galeria.html" class="block py-2 text-gray-100 hover:text-rose-500">Galería</a>
+                <div class="flex items-center gap-4 pt-4 border-t border-gray-800">
+                    <a href="login.html" class="flex-1 text-center bg-rose-600 text-white py-2 rounded font-bold">Login</a>
+                    <a href="registro.html" class="flex-1 text-center border border-white text-white py-2 rounded font-bold">Registro</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md">
+            <h1 class="text-3xl font-black uppercase text-center mb-12 tracking-tight">Inicio de Sesión</h1>
+            
+            <form class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-2 ml-1">Email</label>
+                    <input type="email" placeholder="INTRODUZCA SU CORREO ELECTRÓNICO AQUÍ" class="w-full p-4 border border-gray-200 rounded bg-gray-50 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors text-xs placeholder-gray-400">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 uppercase mb-2 ml-1">Password</label>
+                    <input type="password" placeholder="INTRODUZCA SU CONTRASEÑA AQUÍ" class="w-full p-4 border border-gray-200 rounded bg-gray-50 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors text-xs placeholder-gray-400">
+                </div>
+
+                <button class="w-full bg-rose-600 text-white py-4 rounded font-bold uppercase tracking-wider hover:bg-rose-700 transition-colors shadow-lg shadow-rose-600/20">
+                    Iniciar Sesión
+                </button>
+
+                <div class="flex justify-between text-[10px] uppercase font-bold text-gray-500 pt-4">
+                    <a href="#" class="hover:text-rose-600 border-b border-transparent hover:border-rose-600">¿Ha olvidado su contraseña?</a>
+                    <a href="registro.html" class="hover:text-rose-600 border-b border-transparent hover:border-rose-600">¿No tienes cuenta? Registrase</a>
+                </div>
+            </form>
+
+            <div class="mt-12 pt-8 border-t border-gray-100 flex justify-center gap-6">
+                <a href="#" class="text-gray-400 hover:text-rose-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                <a href="#" class="text-gray-400 hover:text-rose-600 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white pt-8 pb-8 border-t border-gray-800">
+        <div class="container mx-auto px-4 text-center text-xs text-gray-600">
+            &copy; 2025 Antonio & Raquel Bachata Passion.
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

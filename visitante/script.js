@@ -1,128 +1,194 @@
-// Role Management System
-class RoleManager {
-    constructor() {
-        this.currentRole = 'visitante';
-        this.roleSelect = document.getElementById('role-select');
-        this.sections = {
-            visitante: document.getElementById('visitante-section'),
-            cliente: document.getElementById('cliente-section'),
-            administrador: document.getElementById('administrador-section')
-        };
-        
-        this.init();
-    }
+/* script.js */
 
-    init() {
-        // Set initial role from localStorage or default to 'visitante'
-        const savedRole = localStorage.getItem('userRole');
-        if (savedRole && this.sections[savedRole]) {
-            this.currentRole = savedRole;
-            this.roleSelect.value = savedRole;
-        }
-        
-        // Show the appropriate section
-        this.showRoleSection(this.currentRole);
-        
-        // Add event listener for role changes
-        this.roleSelect.addEventListener('change', (e) => {
-            this.changeRole(e.target.value);
-        });
-        
-        // Log role change
-        this.logRoleChange(this.currentRole);
+// --- 1. FUNCIÓN GLOBAL: Menú Móvil ---
+// La exponemos a window para que el 'onclick' del HTML la encuentre
+window.toggleMenu = function() {
+    const menu = document.getElementById('mobile-menu');
+    if (menu) {
+        menu.classList.toggle('hidden');
     }
+};
 
-    changeRole(newRole) {
-        if (this.sections[newRole]) {
-            this.currentRole = newRole;
-            this.showRoleSection(newRole);
-            
-            // Save to localStorage
-            localStorage.setItem('userRole', newRole);
-            
-            // Log the change
-            this.logRoleChange(newRole);
-        }
-    }
-
-    showRoleSection(role) {
-        // Hide all sections
-        Object.keys(this.sections).forEach(key => {
-            this.sections[key].classList.remove('active');
-        });
-        
-        // Show the selected role section
-        if (this.sections[role]) {
-            this.sections[role].classList.add('active');
-        }
-    }
-
-    logRoleChange(role) {
-        const roleNames = {
-            visitante: 'Visitante',
-            cliente: 'Cliente',
-            administrador: 'Administrador'
-        };
-        console.log(`Rol activo: ${roleNames[role]}`);
-    }
-
-    getCurrentRole() {
-        return this.currentRole;
-    }
-}
-
-// Initialize the role manager when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    const roleManager = new RoleManager();
+document.addEventListener('DOMContentLoaded', function() {
     
-    // Make roleManager globally accessible for debugging
-    window.roleManager = roleManager;
-    
-    // Add smooth scroll behavior
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-    
-    // Admin button interactions (placeholder functionality)
-    const adminButtons = document.querySelectorAll('.admin-btn');
-    adminButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const action = this.textContent;
-            console.log(`Acción de administrador: ${action}`);
-            alert(`Funcionalidad "${action}" - Próximamente disponible`);
-        });
-    });
-    
-    // Welcome message based on role
-    displayWelcomeMessage(roleManager.getCurrentRole());
+    // --- 2. LÓGICA: Carrito de Compras (Solo en carrito.html) ---
+    const cartContainer = document.getElementById('cart-container');
+    if (cartContainer) {
+        initializeCart(cartContainer);
+    }
+
+    // --- 3. LÓGICA: Registro Paso 1 (Solo en registro.html) ---
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        initializeRegisterForm(registerForm);
+    }
+
+    // --- 4. LÓGICA: Registro Paso 2 (Solo en registro2.html) ---
+    const confirmForm = document.getElementById('confirmForm');
+    if (confirmForm) {
+        initializeConfirmForm();
+    }
 });
 
-function displayWelcomeMessage(role) {
-    const messages = {
-        visitante: '¡Bienvenido! Explora nuestras clases de bachata.',
-        cliente: '¡Hola! Aquí tienes acceso a tus clases y materiales.',
-        administrador: 'Panel de administración cargado correctamente.'
-    };
+// === DEFINICIÓN DE FUNCIONES (Modularizadas) ===
+
+function initializeCart(container) {
+    updateCartTotals(); // Calcular al cargar
+
+    container.addEventListener('click', function(e) {
+        const target = e.target;
+        // Detectar botones usando closest para atrapar clicks en el icono SVG
+        const btnPlus = target.closest('.btn-plus');
+        const btnMinus = target.closest('.btn-minus');
+        const btnRemove = target.closest('.btn-remove');
+        const cartItem = target.closest('.cart-item');
+
+        if (!cartItem) return;
+
+        const qtyDisplay = cartItem.querySelector('.qty-display');
+        let currentQty = parseInt(qtyDisplay.innerText);
+
+        if (btnPlus) {
+            currentQty++;
+            qtyDisplay.innerText = currentQty;
+            updateItemTotal(cartItem, currentQty);
+            updateCartTotals();
+        } else if (btnMinus) {
+            if (currentQty > 1) {
+                currentQty--;
+                qtyDisplay.innerText = currentQty;
+                updateItemTotal(cartItem, currentQty);
+                updateCartTotals();
+            }
+        } else if (btnRemove) {
+            if(confirm('¿Estás seguro de eliminar este producto?')) {
+                cartItem.remove();
+                updateCartTotals();
+                checkEmptyCart();
+            }
+        }
+    });
+}
+
+function updateItemTotal(item, quantity) {
+    const price = parseFloat(item.dataset.price);
+    const subtotal = price * quantity;
+    const subtotalDisplay = item.querySelector('.subtotal-display');
+    if(subtotalDisplay) subtotalDisplay.innerText = subtotal + '€';
+}
+
+function updateCartTotals() {
+    const items = document.querySelectorAll('.cart-item');
+    let total = 0;
+    let totalCount = 0;
+
+    items.forEach(item => {
+        const price = parseFloat(item.dataset.price);
+        const qtyElement = item.querySelector('.qty-display');
+        if (qtyElement) {
+            const qty = parseInt(qtyElement.innerText);
+            total += (price * qty);
+            totalCount += qty;
+        }
+    });
+
+    const grandTotalEl = document.getElementById('grand-total');
+    if(grandTotalEl) grandTotalEl.innerText = total + '€';
     
-    console.log(messages[role]);
+    // Actualizar badge del header si existe
+    const badge = document.getElementById('cart-count-badge');
+    if(badge) badge.innerText = totalCount;
 }
 
-// Utility function to format dates (used for potential future features)
-function formatDate(date) {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(date).toLocaleDateString('es-ES', options);
+function checkEmptyCart() {
+    const items = document.querySelectorAll('.cart-item');
+    if (items.length === 0) {
+        document.getElementById('cart-container').classList.add('hidden');
+        document.getElementById('cart-footer').classList.add('hidden');
+        document.getElementById('empty-msg').classList.remove('hidden');
+    }
 }
 
-// Export for potential testing
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { RoleManager, formatDate };
+function initializeRegisterForm(form) {
+    // Cargar datos previos si existen
+    const savedData = localStorage.getItem('registroTemp');
+    if(savedData) {
+        const data = JSON.parse(savedData);
+        ['nombre','apellido','telefono','fecha_nacimiento','email','email_confirm','dni','password','password_confirm','cp','genero'].forEach(id => {
+             const input = document.getElementById(id);
+             if(input) input.value = data[id] || '';
+        });
+    }
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const fields = ['nombre', 'apellido', 'telefono', 'fecha_nacimiento', 'email', 'email_confirm', 'dni', 'password', 'password_confirm', 'cp', 'genero'];
+        let hasErrors = false;
+
+        // Limpieza de errores
+        fields.forEach(id => {
+            const input = document.getElementById(id);
+            const errorMsg = document.getElementById('error-' + id);
+            if(input) input.classList.remove('input-error');
+            if(errorMsg) errorMsg.classList.add('hidden');
+        });
+
+        // Validación básica
+        fields.forEach(id => {
+            const input = document.getElementById(id);
+            const errorMsg = document.getElementById('error-' + id);
+            
+            if (input && !input.value.trim()) {
+                input.classList.add('input-error');
+                if(errorMsg) {
+                    errorMsg.innerText = "Este campo es obligatorio";
+                    errorMsg.classList.remove('hidden');
+                }
+                hasErrors = true;
+            }
+        });
+
+        // Validaciones específicas (Email y Password)
+        const email = document.getElementById('email');
+        const emailConfirm = document.getElementById('email_confirm');
+        if(email && emailConfirm && email.value !== emailConfirm.value) {
+            emailConfirm.classList.add('input-error');
+            document.getElementById('error-email_confirm').classList.remove('hidden');
+            hasErrors = true;
+        }
+
+        const pass = document.getElementById('password');
+        const passConfirm = document.getElementById('password_confirm');
+        if(pass && passConfirm && pass.value !== passConfirm.value) {
+            passConfirm.classList.add('input-error');
+            document.getElementById('error-password_confirm').classList.remove('hidden');
+            hasErrors = true;
+        }
+
+        if (hasErrors) return;
+
+        // Guardado
+        const formData = {};
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) formData[id] = el.value;
+        });
+
+        localStorage.setItem('registroTemp', JSON.stringify(formData));
+        window.location.href = 'registro2.html';
+    });
+}
+
+function initializeConfirmForm() {
+    const savedData = localStorage.getItem('registroTemp');
+    if(savedData) {
+        const data = JSON.parse(savedData);
+        const fields = ['nombre', 'apellido', 'telefono', 'fecha_nacimiento', 'email', 'email_confirm', 'dni', 'password', 'password_confirm', 'cp', 'genero'];
+        
+        fields.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.value = data[id] || '';
+        });
+    }
 }
