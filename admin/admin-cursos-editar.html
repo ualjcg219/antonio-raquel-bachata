@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Curso - Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/config.js"></script>
+</head>
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
+
+    <header class="bg-black text-white sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="admin-dashboard.html" class="flex items-center gap-2 group">
+                <div class="relative">
+                    <img src="https://raw.githubusercontent.com/ualjcg219/antonio-raquel-bachata/main/images/logo1.png" alt="Logo Antonio y Raquel" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300">
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-lg font-bold tracking-widest group-hover:text-rose-600 transition-colors">ANTONIO&RAQUEL</span>
+                    <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
+                </div>
+            </a>            <a href="../visitante/index.html" class="bg-rose-900/30 border border-rose-600 text-rose-500 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-rose-600 hover:text-white transition-colors">Volver a Visitante</a>
+        </div>
+        <div class="admin-nav-bar">
+            <div class="container mx-auto">
+                <nav class="admin-nav-list">
+                    <a href="admin-cursos-anadir.html" class="admin-nav-link">Gestionar Cursos</a>
+                    <a href="admin-bonos-lista.html" class="admin-nav-link">Gestionar Bonos</a>
+                    <a href="admin-calendario.html" class="admin-nav-link">Gestionar Calendario</a>
+                    <a href="admin-usuarios-anadir.html" class="admin-nav-link">Gestionar Usuarios</a>
+                    <a href="admin-eventos-lista.html" class="admin-nav-link">Gestionar Eventos</a>
+                    <a href="admin-transacciones-lista.html" class="admin-nav-link">Gestionar Transacciones</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout flex flex-col md:flex-row min-h-[calc(100vh-140px)]">
+        <aside class="w-full md:w-64 bg-gray-100 flex-shrink-0 border-r border-gray-200">
+            <div class="bg-rose-600 text-white p-4 font-black uppercase">MENÚ</div>
+            <nav class="flex flex-col text-sm font-bold uppercase text-gray-800">
+                <a href="admin-cursos-anadir.html" class="p-4 border-b border-gray-200 hover:bg-white">Añadir Curso</a>
+                <a href="admin-cursos-lista.html" class="p-4 border-b border-gray-200 hover:bg-white">Listar Cursos</a>
+                <a href="admin-cursos-editar.html" class="p-4 border-b border-gray-200 bg-rose-600 text-white">Editar Cursos</a>
+            </nav>
+        </aside>
+
+        <main class="flex-grow p-8 bg-white">
+            <h2 class="text-4xl font-black uppercase mb-8 text-center">Editar Cursos</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Tipo de Baile</label>
+                    <select class="form-input w-full"><option>BACHATA</option><option>SALSA</option></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Nivel</label>
+                    <select class="form-input w-full"><option>PRINCIPIANTE</option><option>MEDIO</option></select>
+                </div>
+            </div>
+
+            <div class="bg-black text-white p-4 rounded mb-8 flex justify-between items-center border border-gray-800">
+                <div class="flex items-center gap-4">
+                    <img src="https://picsum.photos/100/60" alt="Curso" class="rounded w-24 h-16 object-cover">
+                    <div>
+                        <h4 class="font-bold uppercase">Bachata Principiante</h4>
+                        <p class="text-xs text-gray-400">Última edición: 07/09/2024</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button class="bg-white text-black p-2 rounded hover:bg-gray-200"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                    <button class="bg-white text-black p-2 rounded hover:bg-red-500 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                </div>
+            </div>
+
+            <div class="border border-gray-300 p-6 rounded bg-gray-50">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Días de Clase</label>
+                        <div class="flex gap-2">
+                            <label class="flex items-center gap-2 bg-white px-3 py-2 border rounded"><input type="checkbox"> Lunes</label>
+                            <label class="flex items-center gap-2 bg-white px-3 py-2 border rounded"><input type="checkbox"> Miércoles</label>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-1/2">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Hora Inicio</label>
+                            <input type="time" value="21:00" class="form-input w-full text-center font-bold text-xl">
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Hora Fin</label>
+                            <input type="time" value="22:00" class="form-input w-full text-center font-bold text-xl">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Descripción</label>
+                    <textarea class="form-input w-full h-24" placeholder="Descripción del curso..."></textarea>
+                </div>
+
+                <button class="w-full bg-rose-600 text-white font-black uppercase py-3 rounded hover:bg-rose-700">LISTO!</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
