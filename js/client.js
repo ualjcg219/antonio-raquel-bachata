@@ -1,4 +1,4 @@
-/* script.js */
+/* js/client.js */
 
 // ==========================================
 // 1. BASE DE DATOS SIMULADA (MOCK DATA)
@@ -6,7 +6,6 @@
 const mockData = {
     usuario: {
         nombre: "Juan",
-        // Ahora el usuario tiene una lista de bonos disponibles
         bonos: [
             { id: "B-100", nombre: "Bono Mensual Bachata (2 clases restantes)" },
             { id: "B-101", nombre: "Bono 10 Clases Salsa (8 clases restantes)" }
@@ -41,52 +40,8 @@ const mockData = {
 };
 
 // ==========================================
-// 2. CONFIGURACIÓN GLOBAL & UTILS
+// 2. UTILIDADES DE CLIENTE
 // ==========================================
-
-// Menú Móvil
-window.toggleMenu = function() {
-    const menu = document.getElementById('mobile-menu');
-    if (menu) menu.classList.toggle('hidden');
-};
-
-// Dropdown Usuario
-window.toggleUserDropdown = function() {
-    const dropdown = document.getElementById('user-dropdown');
-    const chevron = document.getElementById('user-chevron');
-    if (dropdown) {
-        dropdown.classList.toggle('hidden');
-        if(chevron) chevron.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
-    }
-}
-
-// Cerrar dropdown al click fuera
-window.addEventListener('click', function(e) {
-    const button = e.target.closest('#user-menu-btn');
-    const dropdown = document.getElementById('user-dropdown');
-    if (!button && dropdown && !dropdown.classList.contains('hidden')) {
-        dropdown.classList.add('hidden');
-        const chevron = document.getElementById('user-chevron');
-        if(chevron) chevron.style.transform = 'rotate(0deg)';
-    }
-});
-
-// Modales
-window.openModal = function(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('hidden');
-        setTimeout(() => modal.classList.add('open'), 10);
-    }
-}
-
-window.closeModal = function(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('open');
-        setTimeout(() => modal.classList.add('hidden'), 300);
-    }
-}
 
 function formatearFechaBonita(fechaString) {
     const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
@@ -95,18 +50,20 @@ function formatearFechaBonita(fechaString) {
 }
 
 // ==========================================
-// 3. LÓGICA DE INICIO (DASHBOARD)
+// 3. LÓGICA DEL DASHBOARD (INICIO)
 // ==========================================
 function initDashboard() {
+    // Rellenar nombre usuario
     const nombreEls = document.querySelectorAll('.user-name-display');
     nombreEls.forEach(el => el.innerText = mockData.usuario.nombre);
 
-    // Mostrar el primer bono como estado general (o podrías listar todos)
+    // Rellenar bono
     const bonoEl = document.getElementById('user-bonus-status');
     if(bonoEl && mockData.usuario.bonos.length > 0) {
-        bonoEl.innerText = mockData.usuario.bonos[0].nombre; 
+        bonoEl.innerText = mockData.usuario.bonos[0].nombre;
     }
 
+    // Calcular próxima clase
     const hoy = new Date();
     const proximas = mockData.reservas
         .filter(r => new Date(r.fecha) >= hoy && r.estado === 'activa')
@@ -117,10 +74,15 @@ function initDashboard() {
 
     if (proximas.length > 0) {
         const proxima = proximas[0];
-        document.getElementById('next-class-title').innerText = proxima.clase;
-        document.getElementById('next-class-date').innerText = formatearFechaBonita(proxima.fecha);
-        document.getElementById('next-class-time').innerText = proxima.hora + 'h';
-        document.getElementById('next-class-room').innerText = proxima.sala;
+        const titleEl = document.getElementById('next-class-title');
+        const dateEl = document.getElementById('next-class-date');
+        const timeEl = document.getElementById('next-class-time');
+        const roomEl = document.getElementById('next-class-room');
+
+        if(titleEl) titleEl.innerText = proxima.clase;
+        if(dateEl) dateEl.innerText = formatearFechaBonita(proxima.fecha);
+        if(timeEl) timeEl.innerText = proxima.hora + 'h';
+        if(roomEl) roomEl.innerText = proxima.sala;
         
         if(nextClassCard) nextClassCard.classList.remove('hidden');
         if(noClassMsg) noClassMsg.classList.add('hidden');
@@ -131,7 +93,7 @@ function initDashboard() {
 }
 
 // ==========================================
-// 4. LÓGICA DE CALENDARIO Y FORMULARIO RESERVA
+// 4. LÓGICA DEL CALENDARIO (NUEVA RESERVA)
 // ==========================================
 let currentCalendarDate = new Date();
 const today = new Date();
@@ -139,14 +101,13 @@ const today = new Date();
 function initCalendar() {
     renderCalendar(currentCalendarDate);
     
-    // Rellenar desplegable de Bonos si existe
+    // Rellenar desplegable Bonos
     const bonoSelect = document.getElementById('select-bono');
     if (bonoSelect) {
-        // Limpiar opciones por defecto (excepto la primera)
+        // Limpiar opciones previas
         while (bonoSelect.options.length > 1) {
             bonoSelect.remove(1);
         }
-        // Añadir bonos del usuario
         mockData.usuario.bonos.forEach(bono => {
             const option = document.createElement('option');
             option.value = bono.id;
@@ -155,12 +116,13 @@ function initCalendar() {
         });
     }
 
-    // Botones del calendario
+    // Botones Mes Anterior / Siguiente
     const prevBtn = document.getElementById('prev-month');
     const nextBtn = document.getElementById('next-month');
 
     if(prevBtn) {
         prevBtn.addEventListener('click', () => {
+            // Evitar ir al pasado
             const prevMonthDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() - 1, 1);
             if (prevMonthDate.getMonth() >= today.getMonth() || prevMonthDate.getFullYear() > today.getFullYear()) {
                 currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
@@ -185,6 +147,7 @@ function renderCalendar(date) {
     const titleEl = document.getElementById('calendar-title');
     if(titleEl) titleEl.innerText = `${monthNames[month]} ${year}`;
 
+    // Deshabilitar botón "Anterior" si estamos en el mes actual
     const btnPrev = document.getElementById('prev-month');
     if(btnPrev) {
         if (month === today.getMonth() && year === today.getFullYear()) {
@@ -201,16 +164,19 @@ function renderCalendar(date) {
     
     calendarGrid.innerHTML = '';
 
+    // Lógica para dibujar días
     const firstDay = new Date(year, month, 1).getDay();
-    const startDay = firstDay === 0 ? 6 : firstDay - 1; 
+    const startDay = firstDay === 0 ? 6 : firstDay - 1; // Ajuste para que Lunes sea 0
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+    // Celdas vacías iniciales
     for (let i = 0; i < startDay; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.className = 'p-3 border-b border-r border-gray-200 bg-gray-50';
         calendarGrid.appendChild(emptyCell);
     }
 
+    // Días del mes
     for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement('div');
         cell.className = 'p-3 text-sm font-medium border-b border-r border-gray-200 relative h-16 sm:h-auto flex items-center justify-center';
@@ -229,13 +195,14 @@ function renderCalendar(date) {
             cell.classList.add('hover:bg-rose-50', 'cursor-pointer', 'transition-colors');
             cell.innerText = day;
             cell.onclick = function() {
-                // Al hacer clic, marcar visualmente y (simulado) habilitar horarios
+                // Marcar selección visualmente
                 const selected = document.querySelector('.calendar-selected-day');
                 if(selected) selected.classList.remove('calendar-selected-day', 'bg-rose-200');
                 cell.classList.add('calendar-selected-day', 'bg-rose-200');
             };
         }
 
+        // Marcar días con reserva activa
         const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const hasReservation = mockData.reservas.some(r => r.fecha === formattedDate && r.estado === 'activa');
 
@@ -250,13 +217,23 @@ function renderCalendar(date) {
 }
 
 // ==========================================
-// 5. INICIALIZADOR
+// 5. INICIALIZADOR DE CLIENTE
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('dashboard-container')) initDashboard();
-    if (document.getElementById('calendar-container')) initCalendar();
     
-    // Registro 1
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) { /* ... lógica registro ... */ } // Mantenla si la usas
+    // Detectar página Dashboard
+    if (document.getElementById('dashboard-container')) {
+        initDashboard();
+    }
+
+    // Detectar página Calendario
+    if (document.getElementById('calendar-container')) {
+        initCalendar();
+    }
+    
+    // Detectar página Perfil (para rellenar nombre en inputs si quisieras)
+    const profileNameInput = document.querySelector('input[value="Juan"]'); // Selector de ejemplo
+    if(profileNameInput) {
+        // Podrías rellenar el formulario de perfil con mockData.usuario aquí
+    }
 });
