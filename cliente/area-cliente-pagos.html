@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Pagos - Área Cliente</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="config.js"></script>
+</head>
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
+    
+    <header class="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="relative group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-600"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] font-bold text-white">A&R</span>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-lg font-bold tracking-widest">ANTONIO&RAQUEL</span>
+                    <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
+                </div>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="carrito.html" class="text-rose-600 hover:text-white transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                </a>
+                <div class="relative">
+                    <button id="user-menu-btn" onclick="toggleUserDropdown()" class="flex items-center gap-3 focus:outline-none group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-600 bg-gray-900 rounded-full p-1 border border-gray-700 group-hover:border-rose-600 transition-colors"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        <div class="hidden md:block text-right leading-tight">
+                            <span class="block text-[10px] text-rose-500 font-bold uppercase tracking-wider">Bienvenido</span>
+                            <span class="block text-sm font-bold text-gray-200">Usuario</span>
+                        </div>
+                        <svg id="user-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500 transition-transform duration-300"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div id="user-dropdown" class="absolute right-0 mt-3 w-56 bg-white rounded-lg shadow-xl py-2 hidden z-50 border border-gray-200">
+                        <a href="area-cliente-perfil.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Mi Perfil</a>
+                        <a href="area-cliente-reservas.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Mis Reservas</a>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <a href="index.html" class="block px-4 py-2 text-sm text-red-600 font-bold hover:bg-red-50 transition-colors flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout flex flex-col md:flex-row min-h-[calc(100vh-80px)]">
+        
+        <aside class="w-full md:w-72 bg-gray-100 flex-shrink-0 border-r border-gray-200">
+            <div class="bg-rose-600 text-white p-4 font-black uppercase flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                MENÚ
+            </div>
+            <nav class="flex flex-col text-sm font-bold uppercase text-gray-800">
+                <a href="area-cliente-inicio.html" class="p-4 border-b border-gray-200 hover:bg-white transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Inicio
+                </a>
+                <a href="area-cliente-reservas.html" class="p-4 border-b border-gray-200 hover:bg-white transition-colors">Gestión de Reservas</a>
+                <a href="area-cliente-perfil.html" class="p-4 border-b border-gray-200 hover:bg-white transition-colors">Modificar Datos Personales</a>
+                <a href="area-cliente-pagos.html" class="p-4 border-b border-gray-200 bg-rose-600 text-white">Gestión de Pagos</a>
+            </nav>
+            <div class="p-4 mt-auto">
+                <a href="index.html" class="block w-full bg-rose-600 text-white py-3 text-center rounded font-bold uppercase text-xs hover:bg-rose-700">Cerrar Sesión</a>
+            </div>
+        </aside>
+
+        <main class="flex-grow p-8 md:p-12 bg-white">
+            <h2 class="text-4xl font-black uppercase mb-10 text-center border-b border-gray-200 pb-4">Gestión de Pagos</h2>
+
+            <div class="mb-10 max-w-sm">
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Filtrar por fecha:</label>
+                <div class="relative">
+                    <select class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-rose-500 font-medium">
+                        <option>Seleccione las fechas</option>
+                        <option>Último mes</option>
+                        <option>Últimos 3 meses</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border border-rose-200 rounded-lg p-6 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-white" onclick="openModal('modal-transaction')">
+                    <div><h4 class="font-bold uppercase text-lg text-gray-800">Transacción #9923</h4><p class="text-xs text-gray-500 mt-1 max-w-[200px] leading-tight">Compra de Bono Mensual Bachata...</p></div>
+                    <div class="text-right"><span class="block font-black text-xl text-rose-600">22-03-2025</span><span class="inline-block bg-green-100 text-green-800 text-[10px] px-2 py-1 rounded mt-1 font-bold uppercase">Pagado</span></div>
+                </div>
+                <div class="border border-rose-200 rounded-lg p-6 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-white" onclick="openModal('modal-transaction')">
+                    <div><h4 class="font-bold uppercase text-lg text-gray-800">Transacción #9922</h4><p class="text-xs text-gray-500 mt-1 max-w-[200px] leading-tight">Compra Clase Suelta...</p></div>
+                    <div class="text-right"><span class="block font-black text-xl text-rose-600">18-03-2025</span><span class="inline-block bg-green-100 text-green-800 text-[10px] px-2 py-1 rounded mt-1 font-bold uppercase">Pagado</span></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="modal-transaction" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-[9999] opacity-0 transition-opacity duration-300 modal-overlay">
+        <div class="bg-white p-10 rounded-lg max-w-md w-[90%] text-left border-4 border-rose-600 transform translate-y-4 transition-transform duration-300 modal-content">
+            <h3 class="text-3xl font-black text-center uppercase mb-8 border-b-2 border-gray-100 pb-4">Transacción #9923</h3>
+            <div class="mb-6"><p class="font-bold uppercase text-xs text-gray-400 mb-1">Descripción:</p><p class="text-gray-800 font-medium">Compra de Bono Mensual Bachata Passion (Marzo)</p></div>
+            <div class="mb-6"><p class="font-bold uppercase text-xs text-gray-400 mb-1">Fecha:</p><p class="text-gray-800 font-medium">22 de Marzo de 2025</p></div>
+            <div class="mb-8"><p class="font-bold uppercase text-xs text-gray-400 mb-1">Importe Total:</p><p class="text-4xl font-light text-rose-600">35.00€</p></div>
+            <div class="text-center"><button onclick="closeModal('modal-transaction')" class="bg-rose-600 text-white py-3 px-10 rounded font-bold uppercase hover:bg-rose-700 shadow-lg">Cerrar</button></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
