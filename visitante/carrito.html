@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito - Antonio & Raquel Bachata Passion</title>
-    <link rel="stylesheet" href="/css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/config.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="../js/config.js"></script>
 </head>
 <body class="bg-white text-gray-900 flex flex-col min-h-screen">
 
@@ -61,99 +61,27 @@
             <h2 class="text-5xl md:text-7xl font-black text-rose-500 uppercase mb-12 tracking-tight border-b border-gray-200 pb-8">Carrito</h2>
             
             <div id="cart-container" class="space-y-8">
-                <div class="cart-item border-4 border-rose-600 p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 bg-white shadow-sm" data-price="10">
-                    <div class="w-full lg:w-1/3 text-center lg:text-left">
-                        <h4 class="text-xl font-normal text-black uppercase mb-2">BONO INDIVIDUAL</h4>
-                        <p class="text-sm text-black font-bold">Bono válido por una sola clase</p>
-                    </div>
-                    <div class="w-full lg:w-2/3 flex flex-col md:flex-row items-center justify-between gap-6 text-center">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-900 uppercase mb-1">COSTE<br>UNITARIO</span>
-                            <span class="text-2xl font-light text-gray-900">10€</span>
-                        </div>
-                        <div class="flex flex-col no-select">
-                             <span class="text-[10px] text-gray-900 uppercase mb-2">CANTIDAD</span>
-                             <div class="flex justify-center items-center gap-4">
-                                <button type="button" class="btn-minus text-black hover:text-rose-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="pointer-events-none"><path d="M19 20L9 12l10-8v16zM5 4h2v16H5V4z"/></svg>
-                                </button>
-                                <span class="qty-display font-light text-2xl w-6 text-center">2</span>
-                                <button type="button" class="btn-plus text-black hover:text-rose-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="pointer-events-none"><path d="M5 4l10 8-10 8V4zm14 0h2v16h-2V4z"/></svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-900 uppercase mb-1">TOTAL</span>
-                            <span class="subtotal-display text-2xl font-light text-gray-900">20€</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <button class="bg-rose-600 text-white px-6 py-2 rounded font-medium uppercase text-sm hover:bg-rose-700 transition-colors shadow-sm">
-                                COMPRA
-                            </button>
-                            <button type="button" class="btn-remove text-black hover:text-red-600 transition-colors" title="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                            </button>
-                        </div>
-                    </div>
                 </div>
-                 <div class="cart-item border-4 border-rose-600 p-6 lg:p-8 flex flex-col lg:flex-row items-center justify-between gap-6 bg-white shadow-sm" data-price="10">
-                    <div class="w-full lg:w-1/3 text-center lg:text-left">
-                        <h4 class="text-xl font-normal text-black uppercase mb-2">BONO INDIVIDUAL</h4>
-                        <p class="text-sm text-black font-bold">Bono válido por una sola clase</p>
-                    </div>
-                    <div class="w-full lg:w-2/3 flex flex-col md:flex-row items-center justify-between gap-6 text-center">
-                        <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-900 uppercase mb-1">COSTE<br>UNITARIO</span>
-                            <span class="text-2xl font-light text-gray-900">10€</span>
-                        </div>
-                        <div class="flex flex-col no-select">
-                             <span class="text-[10px] text-gray-900 uppercase mb-2">CANTIDAD</span>
-                             <div class="flex justify-center items-center gap-4">
-                                <button type="button" class="btn-minus text-black hover:text-rose-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="pointer-events-none"><path d="M19 20L9 12l10-8v16zM5 4h2v16H5V4z"/></svg>
-                                </button>
-                                <span class="qty-display font-light text-2xl w-6 text-center">2</span>
-                                <button type="button" class="btn-plus text-black hover:text-rose-600 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="pointer-events-none"><path d="M5 4l10 8-10 8V4zm14 0h2v16h-2V4z"/></svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-[10px] text-gray-900 uppercase mb-1">TOTAL</span>
-                            <span class="subtotal-display text-2xl font-light text-gray-900">20€</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <button class="bg-rose-600 text-white px-6 py-2 rounded font-medium uppercase text-sm hover:bg-rose-700 transition-colors shadow-sm">
-                                COMPRA
-                            </button>
-                            <button type="button" class="btn-remove text-black hover:text-red-600 transition-colors" title="Eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+    
             <div id="empty-msg" class="hidden text-center py-24">
                 <p class="mb-6 text-2xl font-light uppercase text-gray-400">Tu carrito está vacío</p>
                 <a href="catalogo.html" class="inline-block bg-rose-600 text-white px-8 py-3 rounded font-bold uppercase hover:bg-rose-700 transition-colors shadow-lg">
                     Volver al catálogo
                 </a>
             </div>
-
+    
             <div id="cart-footer" class="flex flex-col md:flex-row justify-between items-center mt-20 gap-8">
                 <div class="flex gap-8">
                     <a href="catalogo.html" class="bg-rose-600 text-white px-8 py-3 rounded font-bold text-sm uppercase hover:bg-rose-700 transition-colors shadow-sm tracking-wider">
                         VOLVER ATRÁS
                     </a>
-                    <button class="bg-rose-600 text-white px-8 py-3 rounded font-bold text-sm uppercase hover:bg-rose-700 transition-colors shadow-sm tracking-wider">
+                    <button id="btn-checkout" class="bg-rose-600 text-white px-8 py-3 rounded font-bold text-sm uppercase hover:bg-rose-700 transition-colors shadow-sm tracking-wider">
                         CONFIRMAR COMPRA
                     </button>
                 </div>
                 <div class="flex items-baseline gap-2">
                     <span class="text-3xl font-bold text-black uppercase">TOTAL:</span>
-                    <span id="grand-total" class="text-6xl font-bold text-black">60€</span>
+                    <span id="grand-total" class="text-6xl font-bold text-black">0€</span>
                 </div>
             </div>
         </div>
@@ -204,7 +132,9 @@
         </div>
     </footer>
 
-    <script src="js/config.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/cart.js"></script>
+    <script src="../js/modal.js"></script>
 </body>
 </html>
