@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quiénes Somos? - Antonio & Raquel Bachata Passion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
+
+    <header class="bg-black text-white sticky top-0 z-50 border-b border-gray-800">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-2">
+                    <div class="relative group">
+                        <div class="relative group">
+                            <img src="https://raw.githubusercontent.com/ualjcg219/antonio-raquel-bachata/main/images/logo1.png" alt="Logo Antonio y Raquel" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300">
+                        </div>                       
+                    </div>
+                    <div class="flex flex-col leading-none">
+                        <span class="text-lg font-bold tracking-widest">ANTONIO&RAQUEL</span>
+                        <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-wider">
+                    <a href="cursos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Cursos</a>
+                    <a href="catalogo.html" class="text-gray-100 hover:text-rose-400 transition-colors">Catálogo</a>
+                    <a href="eventos.html" class="text-gray-100 hover:text-rose-400 transition-colors">Eventos</a>
+                    <a href="nosotros.html" class="text-rose-500 font-bold">¿Quiénes Somos?</a>
+                    <a href="galeria.html" class="text-gray-100 hover:text-rose-400 transition-colors">Galería</a>
+                </nav>
+                <div class="hidden md:flex items-center gap-4">
+                    <a href="carrito.html" class="relative hover:text-rose-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span class="absolute -top-2 -right-2 bg-rose-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                    </a>
+                    <a href="login.html" class="flex items-center gap-2 bg-rose-600 hover:bg-rose-700 px-4 py-2 rounded text-xs font-bold uppercase transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Iniciar Sesión
+                    </a>
+                </div>
+                <button class="md:hidden" onclick="toggleMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+            <nav id="mobile-menu" class="hidden md:hidden mt-4 flex flex-col gap-4 pb-4 border-t border-gray-800 pt-4">
+                <a href="cursos.html" class="block py-2 text-gray-100 hover:text-rose-500">Cursos</a>
+                <a href="catalogo.html" class="block py-2 text-gray-100 hover:text-rose-500">Catálogo</a>
+                <a href="eventos.html" class="block py-2 text-gray-100 hover:text-rose-500">Eventos</a>
+                <a href="nosotros.html" class="block py-2 text-gray-100 hover:text-rose-500">¿Quiénes Somos?</a>
+                <a href="galeria.html" class="block py-2 text-gray-100 hover:text-rose-500">Galería</a>
+                <div class="flex items-center gap-4 pt-4 border-t border-gray-800">
+                    <a href="login.html" class="flex-1 text-center bg-rose-600 text-white py-2 rounded font-bold">Login</a>
+                    <a href="registro.html" class="flex-1 text-center border border-white text-white py-2 rounded font-bold">Registro</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow py-12">
+        <div class="container mx-auto px-4 max-w-5xl">
+            <section class="mb-20">
+                <h1 class="text-4xl md:text-5xl font-black text-center mb-12 uppercase">¿Quiénes Somos?</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-12">
+                    <div class="order-2 md:order-1">
+                        <p class="text-gray-600 leading-relaxed mb-6 text-justify">
+                            Somos Antonio y Raquel, una pareja unida por el amor y por la pasión que sentimos hacia la bachata sensual. Ambos somos profesores titulados por Korke y Judith, creadores del estilo, y actualmente los únicos certificados en Almería.
+                        </p>
+                        <p class="text-gray-600 leading-relaxed mb-6 text-justify">
+                            Desde muy pequeña, Raquel ha estado vinculada al mundo del arte. El baile, como quinta manifestación artística, ha sido siempre una parte esencial de su vida. Aunque circunstancias externas la apartaron de ese camino durante un tiempo, hace más de 10 años volvió a conectar con su verdadera pasión: la bachata.
+                        </p>
+                    </div>
+                    <div class="order-1 md:order-2">
+                        <img src="https://picsum.photos/600/400?random=50" alt="Antonio y Raquel" class="rounded-lg shadow-xl w-full object-cover transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <img src="https://picsum.photos/600/400?random=51" alt="Dancing" class="rounded-lg shadow-xl w-full object-cover transform -rotate-2 hover:rotate-0 transition-transform duration-500">
+                    </div>
+                    <div>
+                        <p class="text-gray-600 leading-relaxed mb-6 text-justify">
+                            Por su parte, Antonio se sumó a este viaje de una forma muy especial. En un momento clave de su vida y de su relación, decidió acompañar a Raquel en su pasión por el baile, dando un paso que cambiaría su historia. Lo que comenzó como una experiencia compartida se transformó en un proyecto de vida.
+                        </p>
+                        <p class="text-gray-600 leading-relaxed text-justify">
+                            Hoy, Antonio y Raquel siguen aprendiendo, enseñando y disfrutando de cada ritmo, con la firme convicción de que el baile no solo es una disciplina artística, sino también una forma de conectar, compartir y vivir plenamente.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
+                <div>
+                    <h2 class="text-2xl font-black uppercase mb-8 border-b-4 border-gray-900 pb-2 inline-block">Preguntas Frecuentes</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="border-b border-gray-200 pb-4">
+                            <h3 class="text-gray-400 text-sm uppercase mb-2 font-bold">Preguntas sobre bonos</h3>
+                            
+                            <details class="border border-gray-200 rounded mb-2 overflow-hidden bg-gray-50">
+                                <summary class="w-full flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition-colors text-sm font-bold text-gray-800">
+                                    ¿Cómo funciona la clase de prueba?
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </summary>
+                                <div class="p-4 bg-white text-sm text-gray-600 border-t border-gray-200">
+                                    Puedes reservar una clase de prueba a través de nuestra web por un precio reducido. Si te gusta, te descontamos el precio de la matrícula.
+                                </div>
+                            </details>
+
+                            <details class="border border-gray-200 rounded mb-2 overflow-hidden bg-gray-50">
+                                <summary class="w-full flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition-colors text-sm font-bold text-gray-800">
+                                    ¿Cómo se reserva una clase con el bono?
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </summary>
+                                <div class="p-4 bg-white text-sm text-gray-600 border-t border-gray-200">
+                                    Desde tu área de cliente, accede al calendario y selecciona la clase a la que quieres asistir. El sistema descontará automáticamente una sesión de tu bono.
+                                </div>
+                            </details>
+
+                            <details class="border border-gray-200 rounded mb-2 overflow-hidden bg-gray-50">
+                                <summary class="w-full flex justify-between items-center p-4 cursor-pointer hover:bg-gray-100 transition-colors text-sm font-bold text-gray-800">
+                                    ¿El pago del bono es seguro?
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </summary>
+                                <div class="p-4 bg-white text-sm text-gray-600 border-t border-gray-200">
+                                    Sí, utilizamos una pasarela de pago segura (Stripe) que cumple con todos los estándares de seguridad internacionales.
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-black uppercase mb-8 border-b-4 border-gray-900 pb-2 inline-block">Sugerencias</h2>
+                    <form class="bg-gray-50 p-8 rounded-xl border border-gray-200 shadow-sm">
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Escriba aquí su sugerencia...</label>
+                            <textarea rows="6" class="w-full p-4 border border-gray-300 rounded focus:outline-none focus:border-rose-500 resize-none text-sm" placeholder="Cuéntanos cómo podemos mejorar..."></textarea>
+                        </div>
+                        <button class="bg-rose-600 text-white px-6 py-3 rounded font-bold uppercase hover:bg-rose-700 transition-colors flex items-center gap-2 ml-auto">
+                            Enviar <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white pt-16 pb-8 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="relative group">
+                            <img src="https://raw.githubusercontent.com/ualjcg219/antonio-raquel-bachata/main/images/logo1.png" alt="Logo Antonio y Raquel" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300">
+                        </div>                        <div class="flex flex-col leading-none">
+                            <span class="text-lg font-bold">ANTONIO&RAQUEL</span>
+                            <span class="text-xs text-rose-500 font-bold">BACHATA PASSION</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        En A&R Bachata Passion buscamos transmitir la pasión que nosotros mismos sentimos hacia la bachata y la salsa a todos los alumnos.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="https://www.instagram.com/antonioyraquelbachata/" class="hover:text-rose-500 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        <a href="https://www.facebook.com/antonioyraquelbachata/    " class="hover:text-rose-500 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                        <a href="#" class="hover:text-rose-500 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-6 uppercase border-b-2 border-rose-600 inline-block pb-1">Enlaces Rápidos</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="index.html" class="hover:text-rose-500 transition-colors">Inicio</a></li>
+                        <li><a href="cursos.html" class="hover:text-rose-500 transition-colors">Cursos</a></li>
+                        <li><a href="catalogo.html" class="hover:text-rose-500 transition-colors">Catálogo</a></li>
+                        <li><a href="eventos.html" class="hover:text-rose-500 transition-colors">Eventos</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold mb-6 uppercase border-b-2 border-rose-600 inline-block pb-1">Contacto</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li>Calle Bailén 23, Madrid</li>
+                        <li>info@antonioyraquel.com</li>
+                        <li>+34 600 000 000</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center text-gray-600 text-xs pt-8 border-t border-gray-900">
+                &copy; 2025 Antonio & Raquel Bachata Passion. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
