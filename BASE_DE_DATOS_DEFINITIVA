@@ -1,0 +1,172 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS mydb DEFAULT CHARACTER SET utf8mb3 ;
+USE mydb ;
+
+-- -----------------------------------------------------
+-- Table mydb.bono
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.bono (
+  tipo VARCHAR(50) NOT NULL,
+  numDias INT NOT NULL,
+  descripcion VARCHAR(1000) NOT NULL,
+  precio DOUBLE NOT NULL,
+  foto VARCHAR(500) NOT NULL,
+  PRIMARY KEY (tipo, numDias))
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table mydb.cliente
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.cliente (
+  DNI VARCHAR(9) NOT NULL,
+  Nombre VARCHAR(40) NOT NULL,
+  Apellidos VARCHAR(60) NOT NULL,
+  Telefono VARCHAR(15) NOT NULL,
+  FechaNacimiento DATE NOT NULL,
+  Email VARCHAR(100) NOT NULL,
+  Contrasena VARCHAR(255) NOT NULL,
+  CodigoPostal VARCHAR(5) NOT NULL,
+  Genero ENUM('M', 'F', 'O') NOT NULL,
+  PRIMARY KEY (DNI),
+  UNIQUE INDEX Email (Email ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table mydb.transaccion
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.transaccion (
+  idTransaccion INT NOT NULL AUTO_INCREMENT,
+  FechaCompra DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  costo DOUBLE NOT NULL,
+  PRIMARY KEY (idTransaccion))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table mydb.bonocomprado
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.bonocomprado (
+  idBonoComprado INT NOT NULL AUTO_INCREMENT,
+  Cliente_DNI VARCHAR(9) NOT NULL,
+  SaldoClases INT NOT NULL DEFAULT '0',
+  FechaCaducidad DATE NOT NULL,
+  bono_tipo VARCHAR(50) NOT NULL,
+  bono_numDias INT NOT NULL,
+  transaccion_idTransaccion INT NOT NULL,
+  PRIMARY KEY (idBonoComprado),
+  INDEX fk_BonoComprado_Cliente_idx (Cliente_DNI ASC) VISIBLE,
+  INDEX fk_bonocomprado_bono1_idx (bono_tipo ASC, bono_numDias ASC) VISIBLE,
+  INDEX fk_bonocomprado_transaccion1_idx (transaccion_idTransaccion ASC) VISIBLE,
+  CONSTRAINT fk_BonoComprado_Cliente
+    FOREIGN KEY (Cliente_DNI)
+    REFERENCES mydb.cliente (DNI),
+  CONSTRAINT fk_bonocomprado_bono1
+    FOREIGN KEY (bono_tipo , bono_numDias)
+    REFERENCES mydb.bono (tipo , numDias)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT fk_bonocomprado_transaccion1
+    FOREIGN KEY (transaccion_idTransaccion)
+    REFERENCES mydb.transaccion (idTransaccion)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table mydb.curso
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.curso (
+  TipoBaile VARCHAR(20) NOT NULL,
+  Nivel VARCHAR(20) NOT NULL,
+  Descripcion VARCHAR(1000) NOT NULL,
+  Aforo INT NOT NULL,
+  Foto VARCHAR(500) NOT NULL,
+  PRIMARY KEY (TipoBaile, Nivel),
+  UNIQUE INDEX uk_curso (TipoBaile ASC, Nivel ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table mydb.clase
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.clase (
+  idClase INT NOT NULL AUTO_INCREMENT,
+  fechaInicio DATETIME NOT NULL,
+  fechaFin DATETIME NOT NULL,
+  baile VARCHAR(20) NOT NULL,
+  nivel VARCHAR(20) NOT NULL,
+  PRIMARY KEY (idClase),
+  INDEX fk_clase_del_dia_curso1_idx (baile ASC, nivel ASC) VISIBLE,
+  CONSTRAINT fk_clase_del_dia_curso1
+    FOREIGN KEY (baile , nivel)
+    REFERENCES mydb.curso (TipoBaile , Nivel)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table mydb.evento
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.evento (
+  idEvento INT NOT NULL AUTO_INCREMENT,
+  TítuloEvento VARCHAR(45) NOT NULL,
+  FechaEvento DATE NOT NULL,
+  URLFoto VARCHAR(500) NOT NULL,
+  descripciónEvento VARCHAR(1000) NOT NULL,
+  enlaceEvento VARCHAR(500) NOT NULL,
+  PRIMARY KEY (idEvento))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table mydb.reserva
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS mydb.reserva (
+  idReserva INT NOT NULL AUTO_INCREMENT,
+  idClase INT NOT NULL,
+  idBono INT NOT NULL,
+  FechaReserva DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (idReserva),
+  INDEX fk_Reserva_Clase_idx (idClase ASC) VISIBLE,
+  INDEX fk_Reserva_BonoComprado_idx (idBono ASC) VISIBLE,
+  CONSTRAINT fk_Reserva_BonoComprado
+    FOREIGN KEY (idBono)
+    REFERENCES mydb.bonocomprado (idBonoComprado),
+  CONSTRAINT fk_Reserva_Clase
+    FOREIGN KEY (idClase)
+    REFERENCES mydb.clase (idClase)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
