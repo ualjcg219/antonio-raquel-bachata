@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# Permitir el acceso a archivos existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirigir todas las peticiones a index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Habilitar CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"

@@ -1,0 +1,418 @@
+ENDPOINTS (Al final hay un ejemplo compeleto de flujo de compra y reserva de clases)
+1. CLIENTES
+Obtener todos los clientes
+javascriptGET /api/clientes
+
+// Ejemplo con fetch
+fetch('http://localhost/api/clientes')
+  .then(response => response.json())
+  .then(data => console.log(data));
+Obtener cliente por DNI
+javascriptGET /api/clientes/{dni}
+
+// Ejemplo
+fetch('http://localhost/api/clientes/12345678A')
+  .then(response => response.json())
+  .then(data => console.log(data));
+Crear cliente (Registro)
+javascriptPOST /api/clientes
+Content-Type: application/json
+
+{
+  "DNI": "12345678A",
+  "Nombre": "Juan",
+  "Apellidos": "García López",
+  "Telefono": "612345678",
+  "FechaNacimiento": "1990-05-15",
+  "Email": "juan@email.com",
+  "Contrasena": "password123",
+  "CodigoPostal": "28001",
+  "Genero": "M"
+}
+
+// Ejemplo con fetch
+fetch('http://localhost/api/clientes', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    DNI: "12345678A",
+    Nombre: "Juan",
+    Apellidos: "García López",
+    Telefono: "612345678",
+    FechaNacimiento: "1990-05-15",
+    Email: "juan@email.com",
+    Contrasena: "password123",
+    CodigoPostal: "28001",
+    Genero: "M"
+  })
+})
+.then(response => response.json())
+.then(data => console.log(data));
+Login
+javascriptPOST /api/clientes/login
+Content-Type: application/json
+
+{
+  "email": "juan@email.com",
+  "password": "password123"
+}
+
+// Ejemplo con fetch
+fetch('http://localhost/api/clientes/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    email: "juan@email.com",
+    password: "password123"
+  })
+})
+.then(response => response.json())
+.then(data => {
+  if(data.success) {
+    // Guardar datos del cliente
+    localStorage.setItem('cliente', JSON.stringify(data.data));
+  }
+});
+Actualizar cliente
+javascriptPUT /api/clientes/{dni}
+Content-Type: application/json
+
+{
+  "Nombre": "Juan",
+  "Apellidos": "García López",
+  "Telefono": "612345678",
+  "Email": "juan@email.com",
+  "CodigoPostal": "28001"
+}
+Eliminar cliente
+javascriptDELETE /api/clientes/{dni}
+
+2. BONOS
+Obtener todos los bonos
+javascriptGET /api/bonos
+
+// Ejemplo
+fetch('http://localhost/api/bonos')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.data); // Array de bonos
+  });
+Obtener bono específico
+javascriptGET /api/bonos/{tipo}/{numDias}
+
+// Ejemplo
+fetch('http://localhost/api/bonos/Individual/7')
+  .then(response => response.json())
+  .then(data => console.log(data));
+Crear bono
+javascriptPOST /api/bonos
+Content-Type: application/json
+
+{
+  "tipo": "Individual",
+  "numDias": 7,
+  "descripcion": "Bono individual válido por 7 días",
+  "precio": 25.00,
+  "foto": "url_de_la_foto.jpg"
+}
+
+3. CURSOS
+Obtener todos los cursos
+javascriptGET /api/cursos
+
+// Ejemplo
+fetch('http://localhost/api/cursos')
+  .then(response => response.json())
+  .then(data => {
+    data.data.forEach(curso => {
+      console.log(`${curso.TipoBaile} - ${curso.Nivel}`);
+    });
+  });
+Obtener curso específico
+javascriptGET /api/cursos/{tipoBaile}/{nivel}
+
+// Ejemplo (nota: codificar espacios con %20 o encodeURIComponent)
+fetch('http://localhost/api/cursos/Salsa/Principiante')
+  .then(response => response.json())
+  .then(data => console.log(data));
+Crear curso
+javascriptPOST /api/cursos
+Content-Type: application/json
+
+{
+  "TipoBaile": "Bachata",
+  "Nivel": "Intermedio",
+  "Descripcion": "Curso de bachata nivel intermedio",
+  "Aforo": 20,
+  "Foto": "bachata.jpg"
+}
+
+4. CLASES
+Obtener todas las clases
+javascriptGET /api/clases
+
+// Ejemplo
+fetch('http://localhost/api/clases')
+  .then(response => response.json())
+  .then(data => console.log(data));
+Obtener clases disponibles
+javascriptGET /api/clases/disponibles
+
+// Ejemplo para mostrar clases con plazas libres
+fetch('http://localhost/api/clases/disponibles')
+  .then(response => response.json())
+  .then(data => {
+    data.data.forEach(clase => {
+      const plazasLibres = clase.Aforo - clase.reservasActuales;
+      console.log(`${clase.baile} - ${clase.nivel}: ${plazasLibres} plazas libres`);
+    });
+  });
+Obtener clase por ID
+javascriptGET /api/clases/{id}
+Crear clase
+javascriptPOST /api/clases
+Content-Type: application/json
+
+{
+  "fechaInicio": "2024-12-10 18:00:00",
+  "fechaFin": "2024-12-10 19:30:00",
+  "baile": "Salsa",
+  "nivel": "Principiante"
+}
+
+5. RESERVAS
+Obtener todas las reservas
+javascriptGET /api/reservas
+Obtener reservas de un cliente
+javascriptGET /api/reservas/cliente/{dni}
+
+// Ejemplo
+fetch('http://localhost/api/reservas/cliente/12345678A')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Mis reservas:', data.data);
+  });
+Obtener reservas de una clase
+javascriptGET /api/reservas/clase/{idClase}
+Crear reserva
+javascriptPOST /api/reservas
+Content-Type: application/json
+
+{
+  "idClase": 1,
+  "idBonoComprado": 5
+}
+
+// Ejemplo completo
+fetch('http://localhost/api/reservas', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    idClase: 1,
+    idBonoComprado: 5
+  })
+})
+.then(response => response.json())
+.then(data => {
+  if(data.success) {
+    alert('Reserva realizada con éxito');
+  } else {
+    alert(data.message);
+  }
+});
+Cancelar reserva
+javascriptDELETE /api/reservas/{id}
+
+// Ejemplo
+fetch('http://localhost/api/reservas/10', {
+  method: 'DELETE'
+})
+.then(response => response.json())
+.then(data => {
+  if(data.success) {
+    alert('Reserva cancelada. Se ha devuelto el saldo a tu bono.');
+  }
+});
+
+6. BONOS COMPRADOS
+Obtener bonos de un cliente
+javascriptGET /api/bonos-comprados/cliente/{dni}
+
+// Ejemplo
+fetch('http://localhost/api/bonos-comprados/cliente/12345678A')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Mis bonos:', data.data);
+  });
+Obtener bonos activos de un cliente
+javascriptGET /api/bonos-comprados/activos/{dni}
+
+// Ejemplo para mostrar solo bonos con saldo
+fetch('http://localhost/api/bonos-comprados/activos/12345678A')
+  .then(response => response.json())
+  .then(data => {
+    data.data.forEach(bono => {
+      console.log(`${bono.bono_tipo}: ${bono.SaldoClases} clases disponibles`);
+    });
+  });
+
+7. TRANSACCIONES
+Obtener transacciones de un cliente
+javascriptGET /api/transacciones/cliente/{dni}
+Comprar un bono (crear transacción)
+javascriptPOST /api/transacciones
+Content-Type: application/json
+
+{
+  "cliente_DNI": "12345678A",
+  "bono_tipo": "Mensual",
+  "bono_numDias": 30
+}
+
+// Ejemplo completo de compra
+fetch('http://localhost/api/transacciones', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    cliente_DNI: "12345678A",
+    bono_tipo: "Mensual",
+    bono_numDias: 30
+  })
+})
+.then(response => response.json())
+.then(data => {
+  if(data.success) {
+    console.log('Compra realizada');
+    console.log('ID Transacción:', data.data.idTransaccion);
+    console.log('ID Bono Comprado:', data.data.idBonoComprado);
+  }
+});
+
+8. EVENTOS
+Obtener todos los eventos
+javascriptGET /api/eventos
+Obtener eventos próximos
+javascriptGET /api/eventos/proximos
+
+// Ejemplo
+fetch('http://localhost/api/eventos/proximos')
+  .then(response => response.json())
+  .then(data => {
+    data.data.forEach(evento => {
+      console.log(`${evento.TítuloEvento} - ${evento.FechaEvento}`);
+    });
+  });
+Crear evento
+javascriptPOST /api/eventos
+Content-Type: application/json
+
+{
+  "TítuloEvento": "Festival de Salsa 2024",
+  "FechaEvento": "2024-12-20",
+  "URLFoto": "festival.jpg",
+  "descripciónEvento": "Gran festival de salsa con artistas internacionales",
+  "enlaceEvento": "https://ejemplo.com/festival"
+}
+
+Flujo de compra y reserva de clase
+javascript// 1. Login del usuario
+async function login(email, password) {
+  const response = await fetch('http://localhost/api/clientes/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  const data = await response.json();
+  if(data.success) {
+    localStorage.setItem('cliente', JSON.stringify(data.data));
+    return data.data;
+  }
+  throw new Error(data.message);
+}
+
+// 2. Comprar un bono
+async function comprarBono(dni, tipo, numDias) {
+  const response = await fetch('http://localhost/api/transacciones', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      cliente_DNI: dni,
+      bono_tipo: tipo,
+      bono_numDias: numDias
+    })
+  });
+  const data = await response.json();
+  if(data.success) {
+    return data.data.idBonoComprado;
+  }
+  throw new Error(data.message);
+}
+
+// 3. Ver clases disponibles
+async function verClasesDisponibles() {
+  const response = await fetch('http://localhost/api/clases/disponibles');
+  const data = await response.json();
+  return data.data;
+}
+
+// 4. Reservar una clase
+async function reservarClase(idClase, idBonoComprado) {
+  const response = await fetch('http://localhost/api/reservas', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      idClase: idClase,
+      idBonoComprado: idBonoComprado
+    })
+  });
+  const data = await response.json();
+  if(data.success) {
+    return data.data;
+  }
+  throw new Error(data.message);
+}
+
+// 5. Ver mis reservas
+async function verMisReservas(dni) {
+  const response = await fetch(`http://localhost/api/reservas/cliente/${dni}`);
+  const data = await response.json();
+  return data.data;
+}
+
+// Uso completo
+async function flujoCompleto() {
+  try {
+    // Login
+    const cliente = await login('juan@email.com', 'password123');
+    console.log('Login exitoso:', cliente);
+    
+    // Comprar bono
+    const idBono = await comprarBono(cliente.DNI, 'Mensual', 30);
+    console.log('Bono comprado:', idBono);
+    
+    // Ver clases disponibles
+    const clases = await verClasesDisponibles();
+    console.log('Clases disponibles:', clases);
+    
+    // Reservar primera clase disponible
+    if(clases.length > 0) {
+      const reserva = await reservarClase(clases[0].idClase, idBono);
+      console.log('Reserva realizada:', reserva);
+    }
+    
+    // Ver mis reservas
+    const misReservas = await verMisReservas(cliente.DNI);
+    console.log('Mis reservas:', misReservas);
+    
+  } catch(error) {
+    console.error('Error:', error.message);
+  }
+}

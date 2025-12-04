@@ -3,168 +3,159 @@
 
 class Reserva {
     private $conn;
-    private $table_name = "Reserva";
+    private $table = 'reserva';
 
     public $idReserva;
-    public $Cliente_DNI;
-    public $Clase_del_Dia_horaInicio;
-    public $Clase_del_Dia_dia_NumeroDia;
+    public $idClase;
+    public $idBonoComprado;
+    public $FechaReserva;
 
     public function __construct($db) {
         $this->conn = $db;
     }
 
-    // Obtener todas las reservas con detalles de clase y cliente
-    public function read() {
-        $query = "SELECT r.*, 
-                         c.Nombre, c.Apellidos, c.Email,
-                         cd.horaInicio, cd.horaFinal,
-                         cu.TipoBaile, cu.Nivel,
-                         d.NumeroDia, m.NombreMes
-                  FROM " . $this->table_name . " r
-                  LEFT JOIN Cliente c ON r.Cliente_DNI = c.DNI
-                  LEFT JOIN Clase_del_Dia cd ON r.Clase_del_Dia_horaInicio = cd.horaInicio 
-                       AND r.Clase_del_Dia_dia_NumeroDia = cd.dia_NumeroDia
-                  LEFT JOIN Curso cu ON cd.Curso_TipoBaile = cu.TipoBaile 
-                       AND cd.Curso_Nivel = cu.Nivel
-                  LEFT JOIN dia d ON cd.dia_NumeroDia = d.NumeroDia
-                  LEFT JOIN mes m ON d.mes_NombreMes = m.NombreMes";
-        
+    // Obtener todas las reservas
+    public function getAll() {
+        $query = "SELECT r.idReserva, r.idClase, r.idBonoComprado, r.FechaReserva,
+                  c.fechaInicio, c.fechaFin, c.baile, c.nivel,
+                  bc.cliente_DNI, cl.Nombre, cl.Apellidos
+                  FROM " . $this->table . " r
+                  INNER JOIN clase c ON r.idClase = c.idClase
+                  INNER JOIN bonocomprado bc ON r.idBonoComprado = bc.idBonoComprado
+                  INNER JOIN cliente cl ON bc.cliente_DNI = cl.DNI
+                  ORDER BY c.fechaInicio DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
-    // Obtener una reserva específica
-    public function readOne() {
-        $query = "SELECT r.*, 
-                         c.Nombre, c.Apellidos, c.Email,
-                         cd.horaInicio, cd.horaFinal,
-                         cu.TipoBaile, cu.Nivel,
-                         d.NumeroDia, m.NombreMes
-                  FROM " . $this->table_name . " r
-                  LEFT JOIN Cliente c ON r.Cliente_DNI = c.DNI
-                  LEFT JOIN Clase_del_Dia cd ON r.Clase_del_Dia_horaInicio = cd.horaInicio 
-                       AND r.Clase_del_Dia_dia_NumeroDia = cd.dia_NumeroDia
-                  LEFT JOIN Curso cu ON cd.Curso_TipoBaile = cu.TipoBaile 
-                       AND cd.Curso_Nivel = cu.Nivel
-                  LEFT JOIN dia d ON cd.dia_NumeroDia = d.NumeroDia
-                  LEFT JOIN mes m ON d.mes_NombreMes = m.NombreMes
-                  WHERE r.idReserva = ? LIMIT 0,1";
-        
+    // Obtener reservas por cliente
+    public function getByCliente($dni) {
+        $query = "SELECT r.idReserva, r.idClase, r.idBonoComprado, r.FechaReserva,
+                  c.fechaInicio, c.fechaFin, c.baile, c.nivel,
+                  cu.Descripcion, cu.Foto
+                  FROM " . $this->table . " r
+                  INNER JOIN clase c ON r.idClase = c.idClase
+                  INNER JOIN curso cu ON c.baile = cu.TipoBaile AND c.nivel = cu.Nivel
+                  INNER JOIN bonocomprado bc ON r.idBonoComprado = bc.idBonoComprado
+                  WHERE bc.cliente_DNI = ?
+                  ORDER BY c.fechaInicio DESC";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->idReserva);
+        $stmt->bindParam(1, $dni);
         $stmt->execute();
-        
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if($row) {
-            $this->Cliente_DNI = $row['Cliente_DNI'];
-            $this->Clase_del_Dia_horaInicio = $row['horaInicio'];
-            $this->Clase_del_Dia_dia_NumeroDia = $row['NumeroDia'];
-            return true;
-        }
-        
-        return false;
+        return $stmt;
     }
 
-    // Crear una nueva reserva
+    // Obtener reservas por clase
+    public function getByClase() {
+        $query = "SELECT r.idReserva, r.idBonoComprado, r.FechaReserva,
+                  bc.cliente_DNI, cl.Nombre, cl.Apellidos, cl.Email
+                  FROM " . $this->table . " r
+                  INNER JOIN bonocomprado bc ON r.idBonoComprado = bc.idBonoComprado
+                  INNER JOIN cliente cl ON bc.cliente_DNI = cl.DNI
+                  WHERE r.idClase = ?
+                  ORDER BY r.FechaReserva";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->idClase);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    // Crear reserva
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . "
-                SET idReserva=:idReserva, Cliente_DNI=:clienteDNI,
-                    Clase_del_Dia_horaInicio=:horaInicio,
-                    Clase_del_Dia_dia_NumeroDia=:numeroDia";
+        try {
+            $this->conn->beginTransaction();
 
-        $stmt = $this->conn->prepare($query);
+            // Verificar que el bono tiene saldo
+            $queryBono = "SELECT SaldoClases, FechaCaducidad FROM bonocomprado WHERE idBonoComprado = ?";
+            $stmtBono = $this->conn->prepare($queryBono);
+            $stmtBono->bindParam(1, $this->idBonoComprado);
+            $stmtBono->execute();
+            $bono = $stmtBono->fetch(PDO::FETCH_ASSOC);
 
-        // Sanitizar
-        $this->idReserva = htmlspecialchars(strip_tags($this->idReserva));
-        $this->Cliente_DNI = htmlspecialchars(strip_tags($this->Cliente_DNI));
-        $this->Clase_del_Dia_horaInicio = htmlspecialchars(strip_tags($this->Clase_del_Dia_horaInicio));
-        $this->Clase_del_Dia_dia_NumeroDia = htmlspecialchars(strip_tags($this->Clase_del_Dia_dia_NumeroDia));
+            if(!$bono || $bono['SaldoClases'] <= 0) {
+                throw new Exception("El bono no tiene saldo disponible");
+            }
 
-        // Bind
-        $stmt->bindParam(":idReserva", $this->idReserva);
-        $stmt->bindParam(":clienteDNI", $this->Cliente_DNI);
-        $stmt->bindParam(":horaInicio", $this->Clase_del_Dia_horaInicio);
-        $stmt->bindParam(":numeroDia", $this->Clase_del_Dia_dia_NumeroDia);
+            if(strtotime($bono['FechaCaducidad']) < time()) {
+                throw new Exception("El bono ha caducado");
+            }
 
-        if($stmt->execute()) {
+            // Verificar disponibilidad de la clase
+            $queryAforo = "SELECT cu.Aforo, COUNT(r.idReserva) as reservasActuales
+                          FROM clase c
+                          LEFT JOIN curso cu ON c.baile = cu.TipoBaile AND c.nivel = cu.Nivel
+                          LEFT JOIN reserva r ON c.idClase = r.idClase
+                          WHERE c.idClase = ?
+                          GROUP BY c.idClase";
+            $stmtAforo = $this->conn->prepare($queryAforo);
+            $stmtAforo->bindParam(1, $this->idClase);
+            $stmtAforo->execute();
+            $clase = $stmtAforo->fetch(PDO::FETCH_ASSOC);
+
+            if($clase && $clase['reservasActuales'] >= $clase['Aforo']) {
+                throw new Exception("La clase está completa");
+            }
+
+            // Crear la reserva
+            $query = "INSERT INTO " . $this->table . " (idClase, idBonoComprado) VALUES (?, ?)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $this->idClase);
+            $stmt->bindParam(2, $this->idBonoComprado);
+            $stmt->execute();
+
+            // Descontar del saldo del bono
+            $queryUpdate = "UPDATE bonocomprado SET SaldoClases = SaldoClases - 1 WHERE idBonoComprado = ?";
+            $stmtUpdate = $this->conn->prepare($queryUpdate);
+            $stmtUpdate->bindParam(1, $this->idBonoComprado);
+            $stmtUpdate->execute();
+
+            $this->idReserva = $this->conn->lastInsertId();
+            $this->conn->commit();
             return true;
-        }
 
-        return false;
+        } catch(Exception $e) {
+            $this->conn->rollBack();
+            throw $e;
+        }
     }
 
-    // Eliminar una reserva
+    // Cancelar reserva
     public function delete() {
-        $query = "DELETE FROM " . $this->table_name . " WHERE idReserva = ?";
-        $stmt = $this->conn->prepare($query);
-        
-        $this->idReserva = htmlspecialchars(strip_tags($this->idReserva));
-        $stmt->bindParam(1, $this->idReserva);
+        try {
+            $this->conn->beginTransaction();
 
-        if($stmt->execute()) {
+            // Obtener el idBonoComprado antes de eliminar
+            $queryGet = "SELECT idBonoComprado FROM " . $this->table . " WHERE idReserva = ?";
+            $stmtGet = $this->conn->prepare($queryGet);
+            $stmtGet->bindParam(1, $this->idReserva);
+            $stmtGet->execute();
+            $reserva = $stmtGet->fetch(PDO::FETCH_ASSOC);
+
+            if(!$reserva) {
+                throw new Exception("Reserva no encontrada");
+            }
+
+            // Eliminar la reserva
+            $query = "DELETE FROM " . $this->table . " WHERE idReserva = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $this->idReserva);
+            $stmt->execute();
+
+            // Devolver el saldo al bono
+            $queryUpdate = "UPDATE bonocomprado SET SaldoClases = SaldoClases + 1 
+                           WHERE idBonoComprado = ?";
+            $stmtUpdate = $this->conn->prepare($queryUpdate);
+            $stmtUpdate->bindParam(1, $reserva['idBonoComprado']);
+            $stmtUpdate->execute();
+
+            $this->conn->commit();
             return true;
+
+        } catch(Exception $e) {
+            $this->conn->rollBack();
+            throw $e;
         }
-
-        return false;
-    }
-
-    // Obtener reservas de un cliente
-    public function readByCliente() {
-        $query = "SELECT r.*, 
-                         cd.horaInicio, cd.horaFinal,
-                         cu.TipoBaile, cu.Nivel,
-                         d.NumeroDia, m.NombreMes
-                  FROM " . $this->table_name . " r
-                  LEFT JOIN Clase_del_Dia cd ON r.Clase_del_Dia_horaInicio = cd.horaInicio 
-                       AND r.Clase_del_Dia_dia_NumeroDia = cd.dia_NumeroDia
-                  LEFT JOIN Curso cu ON cd.Curso_TipoBaile = cu.TipoBaile 
-                       AND cd.Curso_Nivel = cu.Nivel
-                  LEFT JOIN dia d ON cd.dia_NumeroDia = d.NumeroDia
-                  LEFT JOIN mes m ON d.mes_NombreMes = m.NombreMes
-                  WHERE r.Cliente_DNI = ?";
-        
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->Cliente_DNI);
-        $stmt->execute();
-        return $stmt;
-    }
-
-    // Verificar disponibilidad de una clase
-    public function checkDisponibilidad() {
-        $query = "SELECT COUNT(*) as total, cu.Aforo
-                  FROM " . $this->table_name . " r
-                  LEFT JOIN Clase_del_Dia cd ON r.Clase_del_Dia_horaInicio = cd.horaInicio 
-                       AND r.Clase_del_Dia_dia_NumeroDia = cd.dia_NumeroDia
-                  LEFT JOIN Curso cu ON cd.Curso_TipoBaile = cu.TipoBaile 
-                       AND cd.Curso_Nivel = cu.Nivel
-                  WHERE r.Clase_del_Dia_horaInicio = ? 
-                       AND r.Clase_del_Dia_dia_NumeroDia = ?
-                  GROUP BY cu.Aforo";
-        
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->Clase_del_Dia_horaInicio);
-        $stmt->bindParam(2, $this->Clase_del_Dia_dia_NumeroDia);
-        $stmt->execute();
-        
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if($row && $row['total'] < $row['Aforo']) {
-            return true; // Hay disponibilidad
-        }
-        
-        return false; // No hay disponibilidad
-    }
-
-    // Generar ID automático
-    public function generateId() {
-        $query = "SELECT MAX(idReserva) as maxId FROM " . $this->table_name;
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return ($row['maxId'] ?? 0) + 1;
     }
 }
 ?>

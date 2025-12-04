@@ -3,7 +3,7 @@
 
 class Cliente {
     private $conn;
-    private $table_name = "Cliente";
+    private $table = 'cliente';
 
     public $DNI;
     public $Nombre;
@@ -20,161 +20,98 @@ class Cliente {
     }
 
     // Obtener todos los clientes
-    public function read() {
-        $query = "SELECT * FROM " . $this->table_name;
+    public function getAll() {
+        $query = "SELECT DNI, Nombre, Apellidos, Telefono, FechaNacimiento, Email, CodigoPostal, Genero 
+                  FROM " . $this->table . " ORDER BY Nombre";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
-    // Obtener un cliente por DNI
-    public function readOne() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE DNI = ? LIMIT 0,1";
+    // Obtener cliente por DNI
+    public function getByDNI() {
+        $query = "SELECT DNI, Nombre, Apellidos, Telefono, FechaNacimiento, Email, CodigoPostal, Genero 
+                  FROM " . $this->table . " WHERE DNI = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->DNI);
         $stmt->execute();
-        
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if($row) {
-            $this->Nombre = $row['Nombre'];
-            $this->Apellidos = $row['Apellidos'];
-            $this->Telefono = $row['Telefono'];
-            $this->FechaNacimiento = $row['FechaNacimiento'];
-            $this->Email = $row['Email'];
-            $this->Contrasena = $row['Contrasena'];
-            $this->CodigoPostal = $row['CodigoPostal'];
-            $this->Genero = $row['Genero'];
-            return true;
-        }
-        
-        return false;
+        return $stmt;
     }
 
-    // Crear un nuevo cliente
+    // Crear cliente
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . "
-                SET DNI=:dni, Nombre=:nombre, Apellidos=:apellidos, 
-                    Telefono=:telefono, FechaNacimiento=:fechaNacimiento,
-                    Email=:email, Contrasena=:contrasena, 
-                    CodigoPostal=:codigoPostal, Genero=:genero";
-
-        $stmt = $this->conn->prepare($query);
-
-        // Sanitizar
-        $this->DNI = htmlspecialchars(strip_tags($this->DNI));
-        $this->Nombre = htmlspecialchars(strip_tags($this->Nombre));
-        $this->Apellidos = htmlspecialchars(strip_tags($this->Apellidos));
-        $this->Telefono = htmlspecialchars(strip_tags($this->Telefono));
-        $this->FechaNacimiento = htmlspecialchars(strip_tags($this->FechaNacimiento));
-        $this->Email = htmlspecialchars(strip_tags($this->Email));
-        $this->Contrasena = htmlspecialchars(strip_tags($this->Contrasena));
-        $this->CodigoPostal = htmlspecialchars(strip_tags($this->CodigoPostal));
-        $this->Genero = htmlspecialchars(strip_tags($this->Genero));
-
-        // Bind
-        $stmt->bindParam(":dni", $this->DNI);
-        $stmt->bindParam(":nombre", $this->Nombre);
-        $stmt->bindParam(":apellidos", $this->Apellidos);
-        $stmt->bindParam(":telefono", $this->Telefono);
-        $stmt->bindParam(":fechaNacimiento", $this->FechaNacimiento);
-        $stmt->bindParam(":email", $this->Email);
-        $stmt->bindParam(":contrasena", $this->Contrasena);
-        $stmt->bindParam(":codigoPostal", $this->CodigoPostal);
-        $stmt->bindParam(":genero", $this->Genero);
-
-        if($stmt->execute()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    // Actualizar un cliente
-    public function update() {
-        $query = "UPDATE " . $this->table_name . "
-                SET Nombre=:nombre, Apellidos=:apellidos, 
-                    Telefono=:telefono, FechaNacimiento=:fechaNacimiento,
-                    Email=:email, Contrasena=:contrasena, 
-                    CodigoPostal=:codigoPostal, Genero=:genero
-                WHERE DNI=:dni";
-
-        $stmt = $this->conn->prepare($query);
-
-        // Sanitizar
-        $this->DNI = htmlspecialchars(strip_tags($this->DNI));
-        $this->Nombre = htmlspecialchars(strip_tags($this->Nombre));
-        $this->Apellidos = htmlspecialchars(strip_tags($this->Apellidos));
-        $this->Telefono = htmlspecialchars(strip_tags($this->Telefono));
-        $this->FechaNacimiento = htmlspecialchars(strip_tags($this->FechaNacimiento));
-        $this->Email = htmlspecialchars(strip_tags($this->Email));
-        $this->Contrasena = htmlspecialchars(strip_tags($this->Contrasena));
-        $this->CodigoPostal = htmlspecialchars(strip_tags($this->CodigoPostal));
-        $this->Genero = htmlspecialchars(strip_tags($this->Genero));
-
-        // Bind
-        $stmt->bindParam(":dni", $this->DNI);
-        $stmt->bindParam(":nombre", $this->Nombre);
-        $stmt->bindParam(":apellidos", $this->Apellidos);
-        $stmt->bindParam(":telefono", $this->Telefono);
-        $stmt->bindParam(":fechaNacimiento", $this->FechaNacimiento);
-        $stmt->bindParam(":email", $this->Email);
-        $stmt->bindParam(":contrasena", $this->Contrasena);
-        $stmt->bindParam(":codigoPostal", $this->CodigoPostal);
-        $stmt->bindParam(":genero", $this->Genero);
-
-        if($stmt->execute()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    // Eliminar un cliente
-    public function delete() {
-        $query = "DELETE FROM " . $this->table_name . " WHERE DNI = ?";
+        $query = "INSERT INTO " . $this->table . " 
+                  (DNI, Nombre, Apellidos, Telefono, FechaNacimiento, Email, Contrasena, CodigoPostal, Genero)
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
         $stmt = $this->conn->prepare($query);
         
-        $this->DNI = htmlspecialchars(strip_tags($this->DNI));
+        // Hash de la contraseña
+        $hashedPassword = password_hash($this->Contrasena, PASSWORD_BCRYPT);
+        
         $stmt->bindParam(1, $this->DNI);
-
-        if($stmt->execute()) {
-            return true;
-        }
-
-        return false;
+        $stmt->bindParam(2, $this->Nombre);
+        $stmt->bindParam(3, $this->Apellidos);
+        $stmt->bindParam(4, $this->Telefono);
+        $stmt->bindParam(5, $this->FechaNacimiento);
+        $stmt->bindParam(6, $this->Email);
+        $stmt->bindParam(7, $hashedPassword);
+        $stmt->bindParam(8, $this->CodigoPostal);
+        $stmt->bindParam(9, $this->Genero);
+        
+        return $stmt->execute();
     }
 
-    // Login - verificar credenciales
-    public function login() {
-        $query = "SELECT * FROM " . $this->table_name . " 
-                  WHERE Email = :email AND Contrasena = :contrasena 
-                  LIMIT 0,1";
+    // Actualizar cliente
+    public function update() {
+        $query = "UPDATE " . $this->table . " 
+                  SET Nombre = ?, Apellidos = ?, Telefono = ?, Email = ?, CodigoPostal = ?
+                  WHERE DNI = ?";
         
         $stmt = $this->conn->prepare($query);
         
-        $this->Email = htmlspecialchars(strip_tags($this->Email));
-        $this->Contrasena = htmlspecialchars(strip_tags($this->Contrasena));
+        $stmt->bindParam(1, $this->Nombre);
+        $stmt->bindParam(2, $this->Apellidos);
+        $stmt->bindParam(3, $this->Telefono);
+        $stmt->bindParam(4, $this->Email);
+        $stmt->bindParam(5, $this->CodigoPostal);
+        $stmt->bindParam(6, $this->DNI);
         
-        $stmt->bindParam(":email", $this->Email);
-        $stmt->bindParam(":contrasena", $this->Contrasena);
-        
+        return $stmt->execute();
+    }
+
+    // Eliminar cliente
+    public function delete() {
+        $query = "DELETE FROM " . $this->table . " WHERE DNI = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->DNI);
+        return $stmt->execute();
+    }
+
+    // Login
+    public function login($email, $password) {
+        $query = "SELECT DNI, Nombre, Apellidos, Email, Contrasena FROM " . $this->table . " WHERE Email = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $email);
         $stmt->execute();
         
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if($row) {
-            $this->DNI = $row['DNI'];
-            $this->Nombre = $row['Nombre'];
-            $this->Apellidos = $row['Apellidos'];
-            $this->Telefono = $row['Telefono'];
-            $this->FechaNacimiento = $row['FechaNacimiento'];
-            $this->CodigoPostal = $row['CodigoPostal'];
-            $this->Genero = $row['Genero'];
-            return true;
+        if($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(password_verify($password, $row['Contrasena'])) {
+                unset($row['Contrasena']);
+                return $row;
+            }
         }
-        
         return false;
+    }
+
+    // Verificar si email existe
+    public function emailExists() {
+        $query = "SELECT DNI FROM " . $this->table . " WHERE Email = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->Email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
     }
 }
 ?>

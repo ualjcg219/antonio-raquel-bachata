@@ -3,7 +3,7 @@
 
 class Curso {
     private $conn;
-    private $table_name = "Curso";
+    private $table = 'curso';
 
     public $TipoBaile;
     public $Nivel;
@@ -16,120 +16,66 @@ class Curso {
     }
 
     // Obtener todos los cursos
-    public function read() {
-        $query = "SELECT * FROM " . $this->table_name;
+    public function getAll() {
+        $query = "SELECT TipoBaile, Nivel, Descripcion, Aforo, Foto FROM " . $this->table . " 
+                  ORDER BY TipoBaile, Nivel";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
     }
 
-    // Obtener un curso específico
-    public function readOne() {
-        $query = "SELECT * FROM " . $this->table_name . " 
-                  WHERE TipoBaile = ? AND Nivel = ? LIMIT 0,1";
-        
+    // Obtener curso específico
+    public function getByTipoAndNivel() {
+        $query = "SELECT TipoBaile, Nivel, Descripcion, Aforo, Foto FROM " . $this->table . " 
+                  WHERE TipoBaile = ? AND Nivel = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->TipoBaile);
         $stmt->bindParam(2, $this->Nivel);
         $stmt->execute();
-        
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if($row) {
-            $this->Descripcion = $row['Descripcion'];
-            $this->Aforo = $row['Aforo'];
-            $this->Foto = $row['Foto'];
-            return true;
-        }
-        
-        return false;
+        return $stmt;
     }
 
-    // Crear un nuevo curso
+    // Crear curso
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . "
-                SET TipoBaile=:tipoBaile, Nivel=:nivel, 
-                    Descripcion=:descripcion, Aforo=:aforo, Foto=:foto";
-
+        $query = "INSERT INTO " . $this->table . " 
+                  (TipoBaile, Nivel, Descripcion, Aforo, Foto)
+                  VALUES (?, ?, ?, ?, ?)";
+        
         $stmt = $this->conn->prepare($query);
-
-        // Sanitizar
-        $this->TipoBaile = htmlspecialchars(strip_tags($this->TipoBaile));
-        $this->Nivel = htmlspecialchars(strip_tags($this->Nivel));
-        $this->Descripcion = htmlspecialchars(strip_tags($this->Descripcion));
-        $this->Aforo = htmlspecialchars(strip_tags($this->Aforo));
-        $this->Foto = htmlspecialchars(strip_tags($this->Foto));
-
-        // Bind
-        $stmt->bindParam(":tipoBaile", $this->TipoBaile);
-        $stmt->bindParam(":nivel", $this->Nivel);
-        $stmt->bindParam(":descripcion", $this->Descripcion);
-        $stmt->bindParam(":aforo", $this->Aforo);
-        $stmt->bindParam(":foto", $this->Foto);
-
-        if($stmt->execute()) {
-            return true;
-        }
-
-        return false;
+        
+        $stmt->bindParam(1, $this->TipoBaile);
+        $stmt->bindParam(2, $this->Nivel);
+        $stmt->bindParam(3, $this->Descripcion);
+        $stmt->bindParam(4, $this->Aforo);
+        $stmt->bindParam(5, $this->Foto);
+        
+        return $stmt->execute();
     }
 
-    // Actualizar un curso
+    // Actualizar curso
     public function update() {
-        $query = "UPDATE " . $this->table_name . "
-                SET Descripcion=:descripcion, Aforo=:aforo, Foto=:foto
-                WHERE TipoBaile=:tipoBaile AND Nivel=:nivel";
-
-        $stmt = $this->conn->prepare($query);
-
-        // Sanitizar
-        $this->TipoBaile = htmlspecialchars(strip_tags($this->TipoBaile));
-        $this->Nivel = htmlspecialchars(strip_tags($this->Nivel));
-        $this->Descripcion = htmlspecialchars(strip_tags($this->Descripcion));
-        $this->Aforo = htmlspecialchars(strip_tags($this->Aforo));
-        $this->Foto = htmlspecialchars(strip_tags($this->Foto));
-
-        // Bind
-        $stmt->bindParam(":tipoBaile", $this->TipoBaile);
-        $stmt->bindParam(":nivel", $this->Nivel);
-        $stmt->bindParam(":descripcion", $this->Descripcion);
-        $stmt->bindParam(":aforo", $this->Aforo);
-        $stmt->bindParam(":foto", $this->Foto);
-
-        if($stmt->execute()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    // Eliminar un curso
-    public function delete() {
-        $query = "DELETE FROM " . $this->table_name . " 
+        $query = "UPDATE " . $this->table . " 
+                  SET Descripcion = ?, Aforo = ?, Foto = ?
                   WHERE TipoBaile = ? AND Nivel = ?";
         
         $stmt = $this->conn->prepare($query);
         
-        $this->TipoBaile = htmlspecialchars(strip_tags($this->TipoBaile));
-        $this->Nivel = htmlspecialchars(strip_tags($this->Nivel));
+        $stmt->bindParam(1, $this->Descripcion);
+        $stmt->bindParam(2, $this->Aforo);
+        $stmt->bindParam(3, $this->Foto);
+        $stmt->bindParam(4, $this->TipoBaile);
+        $stmt->bindParam(5, $this->Nivel);
         
-        $stmt->bindParam(1, $this->TipoBaile);
-        $stmt->bindParam(2, $this->Nivel);
-
-        if($stmt->execute()) {
-            return true;
-        }
-
-        return false;
+        return $stmt->execute();
     }
 
-    // Obtener cursos por tipo de baile
-    public function readByTipo() {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE TipoBaile = ?";
+    // Eliminar curso
+    public function delete() {
+        $query = "DELETE FROM " . $this->table . " WHERE TipoBaile = ? AND Nivel = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->TipoBaile);
-        $stmt->execute();
-        return $stmt;
+        $stmt->bindParam(2, $this->Nivel);
+        return $stmt->execute();
     }
 }
 ?>
