@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir Evento - Admin</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/config.js"></script>
+</head>
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
+    <header class="bg-black text-white sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="admin-dashboard.html" class="flex items-center gap-2 group">
+                <div class="relative">
+                    <img src="https://raw.githubusercontent.com/ualjcg219/antonio-raquel-bachata/main/images/logo1.png" alt="Logo Antonio y Raquel" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300">
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-lg font-bold tracking-widest group-hover:text-rose-600 transition-colors">ANTONIO&RAQUEL</span>
+                    <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
+                </div>
+            </a>            <a href="../visitante/index.html" class="bg-rose-900/30 border border-rose-600 text-rose-500 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-rose-600 hover:text-white transition-colors">Volver a Visitante</a>
+        </div>
+        <div class="admin-nav-bar">
+            <div class="container mx-auto">
+                <nav class="admin-nav-list">
+                    <a href="admin-cursos-anadir.html" class="admin-nav-link">Gestionar Cursos</a>
+                    <a href="admin-bonos-lista.html" class="admin-nav-link">Gestionar Bonos</a>
+                    <a href="admin-calendario.html" class="admin-nav-link">Gestionar Calendario</a>
+                    <a href="admin-usuarios-anadir.html" class="admin-nav-link">Gestionar Usuarios</a>
+                    <a href="admin-eventos-lista.html" class="admin-nav-link">Gestionar Eventos</a>
+                    <a href="admin-transacciones-lista.html" class="admin-nav-link">Gestionar Transacciones</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-layout flex flex-col md:flex-row min-h-[calc(100vh-140px)]">
+        <aside class="w-full md:w-64 bg-gray-100 flex-shrink-0 border-r border-gray-200">
+            <div class="bg-rose-600 text-white p-4 font-black uppercase">MENÚ</div>
+            <nav class="flex flex-col text-sm font-bold uppercase text-gray-800">
+                <a href="admin-eventos-lista.html" class="p-4 border-b border-gray-200 hover:bg-white">Listar Eventos</a>
+                <a href="admin-eventos-anadir.html" class="p-4 border-b border-gray-200 hover:bg-white">Añadir Evento</a>
+                <a href="admin-eventos-editar.html" class="p-4 border-b border-gray-200 bg-rose-600 text-white">Editar Eventos</a>
+            </nav>
+        </aside>
+
+        <main class="flex-grow p-8 bg-white">
+            <h2 class="text-4xl font-black uppercase mb-8 text-center">Editar Evento</h2>
+            <div class="border border-rose-200 p-6 rounded bg-white shadow-lg">
+                <h3 class="font-black uppercase mb-6 text-sm text-gray-500">Edite los datos del evento nuevo</h3>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div><label class="block text-xs font-bold uppercase text-gray-500">Mes</label><select class="form-input w-full font-bold"><option>OCTUBRE</option></select></div>
+                    <div><label class="block text-xs font-bold uppercase text-gray-500">Año</label><select class="form-input w-full font-bold"><option>2025</option></select></div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-xs font-bold uppercase text-gray-500">Título</label>
+                    <input type="text" placeholder="Introduzca el título..." class="form-input w-full">
+                </div>
+
+                <div class="flex gap-4 mb-4">
+                    <div class="w-1/2">
+                        <label class="block text-xs font-bold uppercase text-gray-500">Fecha</label>
+                        <input type="text" placeholder="dd/mm/aaaa" class="form-input w-full">
+                    </div>
+                    <div class="w-1/2">
+                        <label class="block text-xs font-bold uppercase text-gray-500">Enlace</label>
+                        <input type="text" placeholder="http://..." class="form-input w-full">
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="w-full md:w-1/2">
+                        <label class="block text-xs font-bold uppercase text-gray-500">Foto</label>
+                        <input type="file" class="form-input w-full text-xs">
+                    </div>
+                    <div class="w-full md:w-1/2">
+                        <label class="block text-xs font-bold uppercase text-gray-500">Descripción</label>
+                        <textarea class="form-input w-full h-32" placeholder="Detalles..."></textarea>
+                    </div>
+                </div>
+
+                <button class="w-full bg-rose-600 text-white font-black uppercase py-3 rounded hover:bg-rose-700 mt-6">LISTO!</button>
+            </div>
+        </main>
+    </div>
+    <script src="../js/main.js"></script>
+</body>
+</html>

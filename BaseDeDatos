@@ -1,0 +1,197 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+USE `mydb` ;
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Cliente` (
+  `DNI` VARCHAR(9) NOT NULL,
+  `Nombre` VARCHAR(40) NOT NULL,
+  `Apellidos` VARCHAR(60) NOT NULL,
+  `Telefono` INT(12) NOT NULL,
+  `FechaNacimiento` DATE NOT NULL,
+  `Email` VARCHAR(100) NOT NULL,
+  `Contrasena` VARCHAR(20) NOT NULL,
+  `CodigoPostal` INT(5) NOT NULL,
+  `Genero` CHAR(1) NOT NULL,
+  PRIMARY KEY (`DNI`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Curso`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Curso` (
+  `TipoBaile` VARCHAR(20) NOT NULL,
+  `Nivel` VARCHAR(20) NOT NULL,
+  `Descripcion` VARCHAR(1000) NOT NULL,
+  `Aforo` INT NOT NULL,
+  `Foto` VARCHAR(500) NOT NULL,
+  PRIMARY KEY (`TipoBaile`, `Nivel`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`mes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`mes` (
+  `NombreMes` VARCHAR(11) NOT NULL,
+  PRIMARY KEY (`NombreMes`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`dia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`dia` (
+  `NumeroDia` INT NOT NULL,
+  `mes_NombreMes` VARCHAR(11) NOT NULL,
+  PRIMARY KEY (`NumeroDia`),
+  INDEX `fk_día_mes1_idx` (`mes_NombreMes` ASC) VISIBLE,
+  CONSTRAINT `fk_día_mes1`
+    FOREIGN KEY (`mes_NombreMes`)
+    REFERENCES `mydb`.`mes` (`NombreMes`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Clase_del_Dia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Clase_del_Dia` (
+  `horaInicio` TIME NOT NULL,
+  `horaFinal` TIME NOT NULL,
+  `dia_NumeroDia` INT NOT NULL,
+  `Curso_TipoBaile` VARCHAR(20) NOT NULL,
+  `Curso_Nivel` VARCHAR(20) NOT NULL,
+  PRIMARY KEY (`horaInicio`, `dia_NumeroDia`),
+  INDEX `fk_Clase_del_Dia_día1_idx` (`dia_NumeroDia` ASC) VISIBLE,
+  INDEX `fk_Clase_del_Dia_Curso1_idx` (`Curso_TipoBaile` ASC, `Curso_Nivel` ASC) VISIBLE,
+  CONSTRAINT `fk_Clase_del_Dia_día1`
+    FOREIGN KEY (`dia_NumeroDia`)
+    REFERENCES `mydb`.`dia` (`NumeroDia`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Clase_del_Dia_Curso1`
+    FOREIGN KEY (`Curso_TipoBaile` , `Curso_Nivel`)
+    REFERENCES `mydb`.`Curso` (`TipoBaile` , `Nivel`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Bono`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Bono` (
+  `tipo` VARCHAR(11) NOT NULL,
+  `numDias` INT NOT NULL,
+  `descripcion` VARCHAR(1000) NOT NULL,
+  `precio` DOUBLE NOT NULL,
+  `foto` VARCHAR(500) NOT NULL,
+  `mes_NombreMes` VARCHAR(11) NOT NULL,
+  PRIMARY KEY (`tipo`, `numDias`),
+  INDEX `fk_Bono_mes1_idx` (`mes_NombreMes` ASC) VISIBLE,
+  CONSTRAINT `fk_Bono_mes1`
+    FOREIGN KEY (`mes_NombreMes`)
+    REFERENCES `mydb`.`mes` (`NombreMes`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Transaccion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Transaccion` (
+  `Compra_fechaCompra` DATETIME NOT NULL,
+  `costo` DOUBLE NOT NULL,
+  PRIMARY KEY (`Compra_fechaCompra`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`BonoComprado`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`BonoComprado` (
+  `idBonoComprado` INT NOT NULL,
+  `Cliente_DNI` VARCHAR(9) NOT NULL,
+  `Bono_tipo` VARCHAR(11) NOT NULL,
+  `Bono_numDias` INT NOT NULL,
+  `Transaccion_Compra_fechaCompra` DATETIME NOT NULL,
+  PRIMARY KEY (`idBonoComprado`, `Cliente_DNI`, `Bono_tipo`, `Bono_numDias`),
+  INDEX `fk_BonoComprado_Cliente1_idx` (`Cliente_DNI` ASC) VISIBLE,
+  INDEX `fk_BonoComprado_Bono1_idx` (`Bono_tipo` ASC, `Bono_numDias` ASC) VISIBLE,
+  INDEX `fk_BonoComprado_Transaccion1_idx` (`Transaccion_Compra_fechaCompra` ASC) VISIBLE,
+  CONSTRAINT `fk_BonoComprado_Cliente1`
+    FOREIGN KEY (`Cliente_DNI`)
+    REFERENCES `mydb`.`Cliente` (`DNI`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_BonoComprado_Bono1`
+    FOREIGN KEY (`Bono_tipo` , `Bono_numDias`)
+    REFERENCES `mydb`.`Bono` (`tipo` , `numDias`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_BonoComprado_Transaccion1`
+    FOREIGN KEY (`Transaccion_Compra_fechaCompra`)
+    REFERENCES `mydb`.`Transaccion` (`Compra_fechaCompra`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Evento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Evento` (
+  `TítuloEvento` VARCHAR(45) NOT NULL,
+  `FechaEvento` DATE NOT NULL,
+  `URLFoto` VARCHAR(500) NULL,
+  `descripciónEvento` VARCHAR(1000) NULL,
+  `enlaceEvento` VARCHAR(500) NULL,
+  PRIMARY KEY (`TítuloEvento`, `FechaEvento`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`Reserva`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `mydb`.`Reserva` (
+  `idReserva` INT NOT NULL,
+  `Cliente_DNI` VARCHAR(9) NOT NULL,
+  `Clase_del_Dia_horaInicio` TIME NOT NULL,
+  `Clase_del_Dia_dia_NumeroDia` INT NOT NULL,
+  PRIMARY KEY (`idReserva`),
+  INDEX `fk_Reserva_Cliente1_idx` (`Cliente_DNI` ASC) VISIBLE,
+  INDEX `fk_Reserva_Clase_del_Dia1_idx` (`Clase_del_Dia_horaInicio` ASC, `Clase_del_Dia_dia_NumeroDia` ASC) VISIBLE,
+  CONSTRAINT `fk_Reserva_Cliente1`
+    FOREIGN KEY (`Cliente_DNI`)
+    REFERENCES `mydb`.`Cliente` (`DNI`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Reserva_Clase_del_Dia1`
+    FOREIGN KEY (`Clase_del_Dia_horaInicio` , `Clase_del_Dia_dia_NumeroDia`)
+    REFERENCES `mydb`.`Clase_del_Dia` (`horaInicio` , `dia_NumeroDia`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
