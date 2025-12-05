@@ -101,47 +101,64 @@
                     </div>
                 </div>
 
+                <!--Gestionar Nueva Reserva-->
                 <div class="w-full lg:w-1/2 bg-gray-50 p-8 rounded-xl border border-gray-200 shadow-lg">
                     <h3 class="text-2xl font-black uppercase mb-8 border-b border-gray-300 pb-4">Gestionar Nueva Reserva</h3>
                     
+                    <!-- Mensaje de error general (oculto por defecto) -->
+                    <div id="form-error-msg" class="hidden mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative text-xs font-bold">
+                        Por favor, completa todos los campos requeridos.
+                    </div>
+
+                    <!-- Selección de BONO -->
                     <div class="mb-6">
                         <label class="block font-bold uppercase text-xs text-gray-500 mb-2">Seleccione Bono a Consumir:</label>
                         <div class="relative">
-                            <select id="select-bono" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-rose-500 font-medium">
-                                <option>Seleccione un bono...</option>
-                                </select>
+                            <!-- Añadido ID: select-bono -->
+                            <select id="select-bono" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-rose-500 font-medium transition-colors">
+                                <option value="">Seleccione un bono...</option>
+                                <!-- Se llenará dinámicamente con JS -->
+                            </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
                         </div>
+                        <p id="error-bono" class="hidden text-red-500 text-[10px] font-bold mt-1 uppercase">Debes seleccionar un bono</p>
                     </div>
 
+                    <!-- Selección de CURSO -->
                     <div class="mb-6">
                         <label class="block font-bold uppercase text-xs text-gray-500 mb-2">Seleccione el Curso:</label>
                         <div class="relative">
-                            <select class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-rose-500 font-medium">
-                                <option>Listado de Cursos Inscritos</option>
-                                <option>Bachata Avanzado</option>
-                                <option>Salsa Cubana</option>
+                            <!-- Añadido ID: select-curso -->
+                            <select id="select-curso" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-rose-500 font-medium transition-colors">
+                                <option value="">Seleccione Curso</option>
+                                <!-- Se llenará dinámicamente con JS -->
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"><svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg></div>
                         </div>
+                        <p id="error-curso" class="hidden text-red-500 text-[10px] font-bold mt-1 uppercase">Debes seleccionar un curso</p>
                     </div>
 
+                    <!-- Selección de CLASE -->
                     <div class="mb-10">
-                        <label class="block font-bold uppercase text-xs text-gray-500 mb-2">Seleccionar Clase:</label>
+                        <label class="block font-bold uppercase text-xs text-gray-500 mb-2">Seleccionar Clase Disponible:</label>
                         <div class="relative">
-                            <select class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-rose-500 font-medium">
-                                <option>Listado de Clases Disponibles</option>
-                                <option>Clase 19:00 - Sala A</option>
-                                <option>Clase 20:30 - Sala B</option>
+                            <!-- Añadido ID: select-clase -->
+                            <select id="select-clase" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-rose-500 font-medium transition-colors" disabled>
+                                <option value="">Primero selecciona fecha y curso</option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"><svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg></div>
                         </div>
+                        <p id="error-clase" class="hidden text-red-500 text-[10px] font-bold mt-1 uppercase">Debes seleccionar una clase</p>
                     </div>
 
-                    <button type="button" onclick="openModal('modal-reserva')" class="w-full bg-rose-600 text-white font-black uppercase py-4 rounded shadow-lg hover:bg-rose-700 transition-transform transform hover:-translate-y-1">REALIZAR RESERVA</button>
+                    <!-- Botón con ID y llamada a la nueva función JS -->
+                    <button id="btn-realizar-reserva" type="button" class="w-full bg-rose-600 text-white font-black uppercase py-4 rounded shadow-lg hover:bg-rose-700 transition-transform transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed">
+                        REALIZAR RESERVA
+                    </button>
                 </div>
+                <!--Fin Gestionar Nueva Reserva-->
             </div>
         </main>
     </div>

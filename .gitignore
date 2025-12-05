@@ -1,1 +1,11 @@
 .config/
+
+# Archivos de entorno (SECRETOS)
+.env
+
+# Dependencias de Composer (Se instalan con 'composer install')
+/vendor/
+
+# Archivos de sistema (Basura de Mac/Windows)
+.DS_Store
+Thumbs.db
