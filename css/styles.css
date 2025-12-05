@@ -179,3 +179,87 @@ input:read-only, select:disabled {
 .modal-overlay.open .modal-content {
     transform: translateY(0);
 }
+
+/* =========================================
+   ESTILOS ESPECÍFICOS ADMIN
+   ========================================= */
+
+/* Barra de Navegación Superior (Admin) */
+.admin-nav-bar {
+    background-color: black;
+    border-top: 1px solid var(--color-gray-800);
+    overflow-x: auto; /* Scroll horizontal en móvil */
+}
+
+.admin-nav-list {
+    display: flex;
+    justify-content: center;
+    min-width: max-content;
+}
+
+.admin-nav-link {
+    display: block;
+    padding: 1rem 1.5rem;
+    color: var(--color-gray-500);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: color 0.3s;
+}
+
+.admin-nav-link:hover, .admin-nav-link.active {
+    color: var(--color-white);
+}
+
+/* Tablas de Administración */
+.admin-table-container {
+    overflow-x: auto;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.5rem;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Ancho mínimo para evitar roturas */
+}
+
+.admin-table th {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+.admin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    font-size: 0.875rem;
+    color: var(--color-gray-800);
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tr:hover {
+    background-color: var(--color-gray-100);
+}
+
+/* Dashboard Stats Cards */
+.stat-card {
+    background: white;
+    border: 1px solid var(--color-gray-200);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+.stat-number {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--color-gray-900);
+}

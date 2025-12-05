@@ -1,0 +1,69 @@
+Endpoints 
+CLIENTE
+-obtener todos los clientes (GET /api/clientes)
+-Obtener cliente por DNI (GET /api/clientes/{dni})
+-Crear/Registrar cliente (POST /api/clientes)
+-Login/Iniciar Sesión(POST /api/clientes/login)
+-Actualizar cliente(PUT /api/clientes/{dni})
+-Eliminar cliente(DELETE /api/clientes/{dni})
+
+BONOS
+-Obtener todos los bonos (GET /api/bonos)
+-Obtener bono concreto(GET /api/bonos/{tipo}/{numDias})
+-Crear bono (POST /api/bonos)
+
+CURSOS
+-Obtener todos los cursos(GET /api/cursos)
+-Obtener curso concreto (GET /api/cursos/{tipoBaile}/{nivel})
+-Crear curso (POST /api/cursos)
+
+CLASES
+-Obtener todas las clases (GET /api/clases)
+-Obtener las clases que hay disponibles/por aforo del curso (GET /api/clases/disponibles)
+-Obtener clase concreta (GET /api/clases/{id})
+-Crear clase (POST /api/clases)
+
+RESERVAS
+-Obtener todas las reservas (GET /api/reservas)
+-Obtener reservas de un cliente concreto (GET /api/reservas/cliente/{dni})
+-Obtener reservas de una clase (GET /api/reservas/clase/{idClase})
+-Crear reserva (POST /api/reservas)
+-Cancelar reserva (DELETE /api/reservas/{id})
+
+BONOS COMPRADOS
+-Obtener todos los bnos comprados de un cliente (GET /api/bonos-comprados/cliente/{dni})
+-Obtener los bonos que están activos para un cliente (GET /api/bonos-comprados/activos/{dni})
+
+TRANSACCIONES
+-Obtener todas las transacciones (GET /api/transacciones/cliente/{dni})
+-Crear Transascción/Comprar un bono (POST /api/transacciones)
+
+EVENTOS
+-Obtener todos los eventos (GET /api/eventos)
+-Obtener los eventos próximos (GET /api/eventos/próximos)
+-Crear evento (POST /api/eventos)
+
+
+
+
+
+Respuestas de la API
+-respuesta exitosa(200,201)
+-respuesta de error(400,404,405)
+
+Códigos de estado
+200 OK: Día exitoso
+201 Created: Recurso creado exitosamente
+400 Bad Request: Hoy no es un día exitoso
+401 Unauthorized: Credenciales inválidas
+404 Not Found: Recurso no encontrado
+405 Method Not Allowed: Método HTTP no permitido
+500 Internal Server Error: Error interno del servidor
+
+
+SEGURIDAD
+
+-las contraseñas usan un hash (password_hash()) con BCRYPT
+-Se evita SQL injection con "prepared statements"
+-los emails son únicos en el sistema
+- las transacciones garantizan la integridad con el uso de BEGIN, COMMIT y ROLLBACK
