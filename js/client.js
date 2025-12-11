@@ -1,49 +1,100 @@
-/* js/client.js */
+/* js/client.js - CONECTADO A BASE DE DATOS */
 
 // ==========================================
-// 1. BASE DE DATOS SIMULADA (MOCK DATA)
+// 0. CONFIGURACIÓN API
 // ==========================================
-const mockData = {
-    usuario: {
-        nombre: "Juan",
-        bonos: [
-            { id: "B-100", nombre: "Bono Mensual Bachata (2 clases restantes)" },
-            { id: "B-101", nombre: "Bono 10 Clases Salsa (8 clases restantes)" }
-        ]
-    },
-    reservas: [
-        {
-            id: "RES-1024",
-            clase: "Bachata Intermedio",
-            fecha: "2025-03-22",
-            hora: "20:30",
-            sala: "Sala 2",
-            estado: "activa"
-        },
-        {
-            id: "RES-1025",
-            clase: "Salsa Cubana Inicio",
-            fecha: "2025-03-25",
-            hora: "19:00",
-            sala: "Sala 1",
-            estado: "activa"
-        },
-        {
-            id: "RES-0900",
-            clase: "Estilo Chicas",
-            fecha: "2025-02-10",
-            hora: "18:00",
-            sala: "Sala 1",
-            estado: "pasada"
-        }
-    ]
-};
+const API_BASE = "admin/api"; 
+// SIMULAMOS QUE EL USUARIO LOGUEADO ES JUAN PÉREZ (DNI de tu script SQL)
+const CURRENT_USER_DNI = "12345678A"; 
+
+// ==========================================
+// 1. HELPERS PARA LA API (Igual que en admin.js)
+// ==========================================
+
+async function getData(resource) {
+    try {
+        const url = `${API_BASE}/${resource}`;
+        const res = await fetch(url);
+        
+        if (!res.ok) return [];
+
+        const json = await res.json();
+        
+        if (json.success === true) return json.data || [];
+        if (Array.isArray(json)) return json;
+        return [];
+    } catch (error) {
+        console.error(`Error al cargar ${resource}:`, error);
+        return [];
+    }
+}
+
+// Funciones específicas de carga
+async function fetchMisDatos() {
+    // Pedimos todos los clientes y buscamos el nuestro
+    // (En una app real, la API tendría un endpoint /perfil que usa la sesión)
+    const clientes = await getData("clientes");
+    return clientes.find(c => c.DNI === CURRENT_USER_DNI);
+}
+
+async function fetchMisBonos() {
+    const bonosComprados = await getData("bonos_comprados"); // Necesitas crear este endpoint o usar lógica similar
+    // Si no tienes el endpoint específico, puedes filtrar aquí si traes todos (aunque no es seguro en producción)
+    // Asumimos que la API devuelve una lista donde está el campo cliente_DNI
+    return bonosComprados.filter(b => b.cliente_DNI === CURRENT_USER_DNI && b.SaldoClases > 0);
+}
+
+async function fetchMisReservas() {
+    // Para mostrar las reservas bonitas, necesitamos cruzar datos:
+    // Reservas + Clases + Cursos (para saber el nombre del baile)
+    
+    const [reservas, clases] = await Promise.all([
+        getData("reservas"), // Asumimos que devuelve todas
+        getData("clases")
+    ]);
+
+    // Filtramos reservas de este usuario (esto se debería hacer en PHP idealmente)
+    // NOTA: Tu tabla 'reserva' tiene 'idBonoComprado', necesitamos saber de quién es ese bono.
+    // Para simplificar, asumiremos que traemos las reservas unidas o filtramos por lógica de bono.
+    // ESTRATEGIA JS: Traer mis bonos, obtener sus IDs, y filtrar reservas que usen esos IDs.
+    
+    const misBonos = await getData("bonos_comprados");
+    const misBonosIds = misBonos
+        .filter(b => b.cliente_DNI === CURRENT_USER_DNI)
+        .map(b => b.idBonoComprado);
+
+    const misReservasRaw = reservas.filter(r => misBonosIds.includes(r.idBonoComprado));
+
+    // Formateamos los datos para que el HTML los entienda
+    return misReservasRaw.map(reserva => {
+        const claseInfo = clases.find(c => c.idClase == reserva.idClase);
+        
+        if (!claseInfo) return null; // Si la clase no existe
+
+        // Convertir fechas MySQL (YYYY-MM-DD HH:MM:SS) a formato JS
+        const fechaInicio = new Date(claseInfo.fechaInicio);
+        
+        // Determinar estado
+        const hoy = new Date();
+        const estado = fechaInicio < hoy ? 'pasada' : 'activa';
+
+        return {
+            id: reserva.idReserva,
+            clase: `${claseInfo.baile} ${claseInfo.nivel}`, // Ej: Salsa Iniciación
+            fecha: fechaInicio.toISOString().split('T')[0], // YYYY-MM-DD
+            hora: fechaInicio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            sala: "Sala Principal", // Dato hardcodeado o añadir a BD
+            estado: estado
+        };
+    }).filter(r => r !== null); // Eliminar nulos
+}
 
 // ==========================================
 // 2. UTILIDADES DE CLIENTE
 // ==========================================
 
 function formatearFechaBonita(fechaString) {
+    if(!fechaString) return "";
     const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
     const fecha = new Date(fechaString);
     return fecha.toLocaleDateString('es-ES', opciones);
@@ -52,22 +103,38 @@ function formatearFechaBonita(fechaString) {
 // ==========================================
 // 3. LÓGICA DEL DASHBOARD (INICIO)
 // ==========================================
-function initDashboard() {
-    // Rellenar nombre usuario
+async function initDashboard() {
+    // 1. Cargar Usuario
+    const usuario = await fetchMisDatos();
     const nombreEls = document.querySelectorAll('.user-name-display');
-    nombreEls.forEach(el => el.innerText = mockData.usuario.nombre);
-
-    // Rellenar bono
-    const bonoEl = document.getElementById('user-bonus-status');
-    if(bonoEl && mockData.usuario.bonos.length > 0) {
-        bonoEl.innerText = mockData.usuario.bonos[0].nombre;
+    if (usuario) {
+        nombreEls.forEach(el => el.innerText = usuario.Nombre);
     }
 
-    // Calcular próxima clase
+    // 2. Cargar Bonos Activos
+    const misBonos = await fetchMisBonos();
+    const bonoEl = document.getElementById('user-bonus-status');
+    
+    if(bonoEl) {
+        if(misBonos.length > 0) {
+            // Mostramos el primero y sus clases restantes
+            const bono = misBonos[0];
+            bonoEl.innerText = `${bono.bono_tipo} (${bono.SaldoClases} clases restantes)`;
+        } else {
+            bonoEl.innerText = "No tienes bonos activos";
+        }
+    }
+
+    // 3. Calcular próxima clase
+    const misReservas = await fetchMisReservas();
+    
+    // Filtramos las futuras
     const hoy = new Date();
-    const proximas = mockData.reservas
-        .filter(r => new Date(r.fecha) >= hoy && r.estado === 'activa')
-        .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+    // Ponemos hora 0 para comparar fechas puras si es necesario, pero aquí usaremos timestamp
+    
+    const proximas = misReservas
+        .filter(r => r.estado === 'activa')
+        .sort((a, b) => new Date(a.fecha + 'T' + a.hora) - new Date(b.fecha + 'T' + b.hora));
 
     const nextClassCard = document.getElementById('next-class-card');
     const noClassMsg = document.getElementById('no-next-class');
@@ -93,25 +160,32 @@ function initDashboard() {
 }
 
 // ==========================================
-// 4. LÓGICA DEL CALENDARIO (NUEVA RESERVA)
+// 4. LÓGICA DEL CALENDARIO
 // ==========================================
 let currentCalendarDate = new Date();
 const today = new Date();
 
-function initCalendar() {
-    renderCalendar(currentCalendarDate);
+async function initCalendar() {
+    // Necesitamos las reservas para pintar los puntitos en el calendario
+    const misReservas = await fetchMisReservas();
+    
+    // Renderizamos el calendario pasando las reservas reales
+    renderCalendar(currentCalendarDate, misReservas);
     
     // Rellenar desplegable Bonos
     const bonoSelect = document.getElementById('select-bono');
     if (bonoSelect) {
+        const misBonos = await fetchMisBonos();
+        
         // Limpiar opciones previas
         while (bonoSelect.options.length > 1) {
             bonoSelect.remove(1);
         }
-        mockData.usuario.bonos.forEach(bono => {
+        
+        misBonos.forEach(bono => {
             const option = document.createElement('option');
-            option.value = bono.id;
-            option.text = bono.nombre;
+            option.value = bono.idBonoComprado; // Usamos el ID real de la BD
+            option.text = `${bono.bono_tipo} - ${bono.SaldoClases} clases`;
             bonoSelect.add(option);
         });
     }
@@ -122,11 +196,10 @@ function initCalendar() {
 
     if(prevBtn) {
         prevBtn.addEventListener('click', () => {
-            // Evitar ir al pasado
             const prevMonthDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() - 1, 1);
             if (prevMonthDate.getMonth() >= today.getMonth() || prevMonthDate.getFullYear() > today.getFullYear()) {
                 currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
-                renderCalendar(currentCalendarDate);
+                renderCalendar(currentCalendarDate, misReservas);
             }
         });
     }
@@ -134,12 +207,12 @@ function initCalendar() {
     if(nextBtn) {
         nextBtn.addEventListener('click', () => {
             currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
-            renderCalendar(currentCalendarDate);
+            renderCalendar(currentCalendarDate, misReservas);
         });
     }
 }
 
-function renderCalendar(date) {
+function renderCalendar(date, reservas = []) {
     const month = date.getMonth();
     const year = date.getFullYear();
     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -147,7 +220,7 @@ function renderCalendar(date) {
     const titleEl = document.getElementById('calendar-title');
     if(titleEl) titleEl.innerText = `${monthNames[month]} ${year}`;
 
-    // Deshabilitar botón "Anterior" si estamos en el mes actual
+    // Deshabilitar botón "Anterior"
     const btnPrev = document.getElementById('prev-month');
     if(btnPrev) {
         if (month === today.getMonth() && year === today.getFullYear()) {
@@ -164,12 +237,11 @@ function renderCalendar(date) {
     
     calendarGrid.innerHTML = '';
 
-    // Lógica para dibujar días
     const firstDay = new Date(year, month, 1).getDay();
-    const startDay = firstDay === 0 ? 6 : firstDay - 1; // Ajuste para que Lunes sea 0
+    const startDay = firstDay === 0 ? 6 : firstDay - 1; 
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // Celdas vacías iniciales
+    // Celdas vacías
     for (let i = 0; i < startDay; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.className = 'p-3 border-b border-r border-gray-200 bg-gray-50';
@@ -195,16 +267,19 @@ function renderCalendar(date) {
             cell.classList.add('hover:bg-rose-50', 'cursor-pointer', 'transition-colors');
             cell.innerText = day;
             cell.onclick = function() {
-                // Marcar selección visualmente
                 const selected = document.querySelector('.calendar-selected-day');
                 if(selected) selected.classList.remove('calendar-selected-day', 'bg-rose-200');
                 cell.classList.add('calendar-selected-day', 'bg-rose-200');
+                
+                // Aquí podrías llamar a una función para mostrar las clases disponibles ESE día
+                // showClassesForDate(year, month, day);
             };
         }
 
-        // Marcar días con reserva activa
+        // Marcar días con reserva activa usando los datos reales
         const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const hasReservation = mockData.reservas.some(r => r.fecha === formattedDate && r.estado === 'activa');
+        
+        const hasReservation = reservas.some(r => r.fecha === formattedDate && r.estado === 'activa');
 
         if (hasReservation && !isToday) {
             const indicator = document.createElement('div');
@@ -219,21 +294,25 @@ function renderCalendar(date) {
 // ==========================================
 // 5. INICIALIZADOR DE CLIENTE
 // ==========================================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     
     // Detectar página Dashboard
     if (document.getElementById('dashboard-container')) {
-        initDashboard();
+        await initDashboard();
     }
 
     // Detectar página Calendario
     if (document.getElementById('calendar-container')) {
-        initCalendar();
+        await initCalendar();
     }
     
-    // Detectar página Perfil (para rellenar nombre en inputs si quisieras)
-    const profileNameInput = document.querySelector('input[value="Juan"]'); // Selector de ejemplo
+    // Perfil
+    const profileNameInput = document.querySelector('input[name="nombre"]'); // Asegúrate que el name coincida
     if(profileNameInput) {
-        // Podrías rellenar el formulario de perfil con mockData.usuario aquí
+        const usuario = await fetchMisDatos();
+        if(usuario) {
+            profileNameInput.value = usuario.Nombre;
+            // Rellenar resto del form...
+        }
     }
 });

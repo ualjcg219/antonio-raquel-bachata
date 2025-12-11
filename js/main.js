@@ -1,7 +1,11 @@
-/* js/main.js */
+/* ============================================
+   MAIN JS – UTILIDADES GLOBALES Y REGISTRO
+   ============================================ */
+
+const API_BASE_GLOBAL = "/api"; // Ruta base para registro
 
 // ==========================================
-// 1. UTILIDADES GLOBALES (UI)
+// 1. UTILIDADES UI (Menús, Modales, Dropdowns)
 // ==========================================
 
 // Menú Móvil
@@ -33,12 +37,11 @@ window.addEventListener('click', function(e) {
     }
 });
 
-// Sistema de Modales (Popups) Globales
+// Sistema de Modales Globales
 window.openModal = function(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.remove('hidden');
-        // Pequeño timeout para permitir la transición CSS
         setTimeout(() => modal.classList.add('open'), 10);
     }
 }
@@ -52,140 +55,127 @@ window.closeModal = function(modalId) {
 }
 
 // ==========================================
-// 2. LÓGICA DEL CARRITO DE COMPRAS
+// 2. BADGE DEL CARRITO (Global)
 // ==========================================
-
-function initializeCart(container) {
-    // Escuchar clicks dentro del carrito (Delegación de eventos)
-    container.addEventListener('click', function(e) {
-        const target = e.target;
-        const btnPlus = target.closest('.btn-plus');
-        const btnMinus = target.closest('.btn-minus');
-        const btnRemove = target.closest('.btn-remove');
-        
-        const cartItem = target.closest('.cart-item');
-        if (!cartItem) return;
-
-        const qtyDisplay = cartItem.querySelector('.qty-display');
-        let currentQty = parseInt(qtyDisplay.innerText);
-
-        if (btnPlus) {
-            currentQty++;
-            qtyDisplay.innerText = currentQty;
-            updateItemTotal(cartItem, currentQty);
-            updateCartTotals();
-        } else if (btnMinus) {
-            if (currentQty > 1) {
-                currentQty--;
-                qtyDisplay.innerText = currentQty;
-                updateItemTotal(cartItem, currentQty);
-                updateCartTotals();
-            }
-        } else if (btnRemove) {
-            if(confirm('¿Estás seguro de eliminar este producto?')) {
-                cartItem.remove();
-                updateCartTotals();
-                checkEmptyCart();
-            }
-        }
-    });
-}
-
-function updateItemTotal(item, quantity) {
-    const price = parseFloat(item.dataset.price);
-    const subtotal = price * quantity;
-    const subtotalDisplay = item.querySelector('.subtotal-display');
-    if(subtotalDisplay) subtotalDisplay.innerText = subtotal + '€';
-}
-
-function updateCartTotals() {
-    const items = document.querySelectorAll('.cart-item');
-    let total = 0;
-    let totalCount = 0;
-
-    items.forEach(item => {
-        const price = parseFloat(item.dataset.price);
-        const qtyDisplay = item.querySelector('.qty-display');
-        if(qtyDisplay) {
-            const qty = parseInt(qtyDisplay.innerText);
-            total += (price * qty);
-            totalCount += qty;
-        }
-    });
-
-    // Actualizar total precio
-    const grandTotalEl = document.getElementById('grand-total');
-    if(grandTotalEl) grandTotalEl.innerText = total + '€';
-    
-    // Actualizar badge rojo del header (existe en todas las páginas)
+// Esta función se ejecuta en TODAS las páginas para mostrar el numerito rojo
+function updateGlobalBadge() {
     const badge = document.getElementById('cart-count-badge');
-    if(badge) badge.innerText = totalCount;
-}
-
-function checkEmptyCart() {
-    const items = document.querySelectorAll('.cart-item');
-    if (items.length === 0) {
-        const cartContainer = document.getElementById('cart-container');
-        const cartFooter = document.getElementById('cart-footer');
-        const emptyMsg = document.getElementById('empty-msg');
-        
-        if(cartContainer) cartContainer.classList.add('hidden');
-        if(cartFooter) cartFooter.classList.add('hidden');
-        if(emptyMsg) emptyMsg.classList.remove('hidden');
+    if (badge) {
+        const cart = JSON.parse(localStorage.getItem('myCart')) || [];
+        const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+        badge.innerText = totalItems;
+        badge.style.display = totalItems === 0 ? 'none' : 'flex';
     }
 }
 
 // ==========================================
-// 3. INICIALIZADOR GENERAL (DOM READY)
+// 3. LÓGICA DE REGISTRO (CONECTADA A BD)
+// ==========================================
+
+async function registerUserInDB(userData) {
+    try {
+        // Enviamos los datos a clientes.php usando POST
+        const response = await fetch(`${API_BASE_GLOBAL}/clientes.php`, {
+            method: 'POST', // Importante: POST para crear
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error("Error en registro:", error);
+        return { success: false, message: "Error de conexión con el servidor" };
+    }
+}
+
+// ==========================================
+// 4. INICIALIZADOR GENERAL (DOM READY)
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
     
-    // A. Inicializar Carrito (Si estamos en la página carrito)
-    const cartContainer = document.getElementById('cart-container');
-    if (cartContainer) {
-        initializeCart(cartContainer);
-    }
-    // Siempre actualizar el badge del header, aunque no estemos en carrito.html
-    // (Busca items solo si existen, si no, pone 0)
-    updateCartTotals(); 
+    // A. Actualizar siempre el numerito del carrito
+    updateGlobalBadge();
 
-    // B. Lógica de Registro (Paso 1)
+    // B. Lógica de Registro PASO 1 (Guardar temporalmente)
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
-        // Cargar datos previos
+        // Cargar datos previos si el usuario vuelve atrás
         const savedData = localStorage.getItem('registroTemp');
         if(savedData) {
             const data = JSON.parse(savedData);
-            ['nombre','apellido','telefono','fecha_nacimiento','email','email_confirm','dni','password','password_confirm','cp','genero'].forEach(id => {
-                 const el = document.getElementById(id);
-                 if(el) el.value = data[id] || '';
+            // Rellenar inputs
+            Object.keys(data).forEach(key => {
+                 const el = document.getElementById(key);
+                 if(el) el.value = data[key];
             });
         }
         
         registerForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            // Aquí irían las validaciones...
-            // Simulamos guardado:
+            
+            // Recoger datos del formulario
             const formData = {};
             const inputs = registerForm.querySelectorAll('input, select');
             inputs.forEach(input => formData[input.id] = input.value);
             
+            // Validaciones básicas (puedes añadir más)
+            if(formData.password !== formData.password_confirm) {
+                alert("Las contraseñas no coinciden");
+                return;
+            }
+
+            // Guardar en memoria y pasar al paso 2
             localStorage.setItem('registroTemp', JSON.stringify(formData));
-            window.location.href = 'registro2.html';
+            window.location.href = 'registro2.html'; // Asegúrate que esta página existe
         });
     }
     
-    // C. Confirmación Registro (Paso 2)
+    // C. Lógica de Registro PASO 2 (Confirmar y Enviar a BD)
     const confirmForm = document.getElementById('confirmForm');
     if (confirmForm) {
-        const savedData = localStorage.getItem('registroTemp');
-        if(savedData) {
-            const data = JSON.parse(savedData);
-            const fields = ['nombre', 'apellido', 'telefono', 'fecha_nacimiento', 'email', 'email_confirm', 'dni', 'password', 'password_confirm', 'cp', 'genero'];
-            fields.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.value = data[id] || '';
-            });
+        // Recuperar datos del paso 1
+        const savedDataString = localStorage.getItem('registroTemp');
+        if (!savedDataString) {
+            // Si no hay datos, volver al paso 1
+            window.location.href = 'registro.html';
+            return;
         }
+
+        const savedData = JSON.parse(savedDataString);
+        
+        // Rellenar campos ocultos o visibles del paso 2 si existen
+        Object.keys(savedData).forEach(key => {
+            const el = document.getElementById(key);
+            if(el) el.value = savedData[key];
+        });
+
+        confirmForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btnSubmit = confirmForm.querySelector('button[type="submit"]');
+            const originalText = btnSubmit.innerText;
+            btnSubmit.innerText = "Registrando...";
+            btnSubmit.disabled = true;
+
+            // Unir datos guardados con posibles datos nuevos del paso 2
+            // (Si en el paso 2 pides más cosas, recógelas aquí)
+            const finalData = { ...savedData };
+
+            // ENVIAR A LA BASE DE DATOS
+            const result = await registerUserInDB(finalData);
+
+            if (result.success) {
+                localStorage.removeItem('registroTemp'); // Limpiar temporal
+                alert("¡Registro completado con éxito! Ahora puedes iniciar sesión.");
+                window.location.href = 'login.html';
+            } else {
+                alert("Error al registrar: " + (result.message || "Inténtalo de nuevo."));
+                btnSubmit.innerText = originalText;
+                btnSubmit.disabled = false;
+            }
+        });
     }
 });
