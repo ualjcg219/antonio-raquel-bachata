@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /api/
+
+# Si el archivo o directorio existe, déjalo pasar
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirige el resto a index.php para que el router PHP lo maneje
+RewriteRule ^.*$ index.php [QSA,L]

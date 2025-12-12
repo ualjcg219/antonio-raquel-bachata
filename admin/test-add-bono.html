@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Añadir Bono</title>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('submit-bono');
+
+    btn.addEventListener('click', async function() {
+        const tipo = document.getElementById('tipo').value;
+        const numDias = document.getElementById('numDias').value;
+        const precio = document.getElementById('precio').value;
+        const descripcion = document.getElementById('descripcion').value;
+        const fotoInput = document.getElementById('foto');
+
+        if(!tipo || !numDias || !precio || !descripcion){
+            alert("Rellena todos los campos");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('tipo', tipo);
+        formData.append('numDias', numDias);
+        formData.append('precio', precio);
+        formData.append('descripcion', descripcion);
+        if(fotoInput.files[0]) formData.append('foto', fotoInput.files[0]);
+
+        try {
+            const res = await fetch('http://localhost/antonio-raquel-bachata/api/bonos/create.php', {
+                method: 'POST',
+                body: formData
+            });
+            const json = await res.json();
+            alert(json.success ? "Bono creado!" : "Error: " + json.message);
+        } catch(err) {
+            console.error(err);
+            alert("Error de red al crear bono");
+        }
+    });
+});
+</script>
+</head>
+<body>
+
+<h2>Añadir Bono</h2>
+
+<label>Tipo:</label>
+<select id="tipo">
+<option>Semanal</option>
+<option>Mensual</option>
+<option>Individual</option>
+</select>
+<br>
+
+<label>Días:</label>
+<select id="numDias">
+<option>5 Días</option>
+<option>3 Días</option>
+</select>
+<br>
+
+<label>Precio:</label>
+<input type="text" id="precio" placeholder="Ej: 70€">
+<br>
+
+<label>Descripción:</label>
+<textarea id="descripcion"></textarea>
+<br>
+
+<label>Foto:</label>
+<input type="file" id="foto">
+<br><br>
+
+<button type="button" id="submit-bono">LISTO!</button>
+
+</body>
+</html>

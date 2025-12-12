@@ -1,60 +1,57 @@
-/* ============================================
-   ADMIN DASHBOARD – JAVASCRIPT COMPLETO
-   Conexión a API en XAMPP
-   ============================================ */
+/* js/admin.js
+   Adaptado para trabajar con api/index.php usando __route (evita dependencias de mod_rewrite).
+   Coloca este fichero en: C:\xampp\htdocs\antonio-raquel-bachata\js\admin.js
+*/
 
-/* ============================================
-   ADMIN DASHBOARD – JAVASCRIPT CORREGIDO
-   ============================================ */
+const API_INDEX = '/antonio-raquel-bachata/api/index.php'; // front controller
+const API_TIMEOUT = 15000; // ms
 
-// Asegúrate de que esta ruta base es correcta
-
-const API_BASE = "http://localhost/antonio-raquel-bachata/api";
-
-// Función auxiliar para manejar la respuesta
-async function getData(url) {
+// Helper: fetch con timeout
+async function fetchWithTimeout(resource, options = {}) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), API_TIMEOUT);
+    options.signal = controller.signal;
     try {
-        const res = await fetch(url);
-        const json = await res.json();
-        
-        // Si la respuesta es success, devolvemos SOLO el array 'data'
-        // Si 'data' viene vacío o null, devolvemos un array vacío [] para que no falle el .map
-        if (json.success === true) {
-            return json.data || [];
-        } else {
-            console.error("Error API:", json.message);
+        const res = await fetch(resource, options);
+        clearTimeout(id);
+        return res;
+    } catch (err) {
+        clearTimeout(id);
+        throw err;
+    }
+}
+
+// Función auxiliar para obtener datos JSON desde el front controller usando __route
+async function getData(route) {
+    const url = `${API_INDEX}?__route=${encodeURIComponent(route)}`;
+    try {
+        const res = await fetchWithTimeout(url, { credentials: 'include' });
+        const text = await res.text();
+        // intentar parsear JSON; si no es JSON, retornar array vacío y loggear
+        try {
+            const json = text ? JSON.parse(text) : null;
+            if (json && json.success === true) return json.data || [];
+            console.warn('API responded but not success', route, json);
+            return [];
+        } catch (e) {
+            console.warn('getData: respuesta no JSON para', route, 'raw:', text);
             return [];
         }
-    } catch (error) {
-        console.error("Error de red:", error);
+    } catch (err) {
+        console.error('getData: error de red al solicitar', route, err);
         return [];
     }
 }
 
-// === TUS FUNCIONES ACTUALIZADAS ===
+// Fetchers que usan getData()
+async function fetchUsuarios() { return await getData('/api/clientes'); }
+async function fetchTransacciones() { return await getData('/api/transacciones'); } // si no existe, devolverá []
+async function fetchCursos() { return await getData('/api/cursos'); }
+async function fetchBonos() { return await getData('/api/bonos'); }
+async function fetchEventos() { return await getData('/api/eventos'); }
 
-async function fetchUsuarios() {
-    // Usamos la ruta nueva '/clientes' y extraemos .data
-    return await getData(`${API_BASE}/clientes`);
-}
-
-async function fetchTransacciones() {
-    return await getData(`${API_BASE}/transacciones`);
-}
-
-async function fetchCursos() {
-    return await getData(`${API_BASE}/cursos`);
-}
-
-async function fetchBonos() {
-    return await getData(`${API_BASE}/bonos`);
-}
-
-async function fetchEventos() {
-    return await getData(`${API_BASE}/eventos`);
-}
 /* -------------------------------------
-   2. RENDERIZAR TABLAS Y LISTADOS
+   RENDERIZADO
    ------------------------------------- */
 
 // === USUARIOS ===
@@ -63,13 +60,12 @@ async function renderUserTable() {
     if (!tbody) return;
 
     const usuarios = await fetchUsuarios();
-
     tbody.innerHTML = usuarios.map(user => `
         <tr>
-            <td class="font-bold">${user.Nombre}</td>
-            <td>${user.Telefono}</td>
-            <td>${user.Email}</td>
-            <td>${user.DNI ?? '—'}</td>
+            <td class="font-bold">${user.Nombre ?? user.nombre ?? user.NombreCliente ?? '—'}</td>
+            <td>${user.Telefono ?? user.telefono ?? '—'}</td>
+            <td>${user.Email ?? user.email ?? '—'}</td>
+            <td>${user.DNI ?? user.dni ?? '—'}</td>
             <td class="text-right">
                 <button class="text-gray-500 hover:text-rose-600 mr-2">✏</button>
                 <button class="text-gray-500 hover:text-rose-600">🗑</button>
@@ -87,11 +83,11 @@ async function renderTransactionTable() {
 
     tbody.innerHTML = transacciones.map(tx => `
         <tr>
-            <td class="font-bold">${tx.cliente_DNI}</td>
-            <td>${tx.fechaTransaccion}</td>
-            <td>${tx.bono_tipo}</td>
-            <td>${tx.bono_numDias}</td>
-            <td>${tx.importe}€</td>
+            <td class="font-bold">${tx.cliente_DNI ?? tx.clienteDNI ?? tx.dni ?? '—'}</td>
+            <td>${tx.fechaTransaccion ?? tx.fecha ?? '—'}</td>
+            <td>${tx.bono_tipo ?? tx.tipo ?? '—'}</td>
+            <td>${tx.bono_numDias ?? tx.numDias ?? '—'}</td>
+            <td>${tx.importe ?? tx.coste ?? '—'}€</td>
             <td class="text-right">
                 <button>✏</button>
                 <button>🗑</button>
@@ -108,10 +104,10 @@ async function renderCursosTable() {
     const cursos = await fetchCursos();
 
     container.innerHTML = cursos.map(curso => `
-        <div class="border rounded p-4 shadow-sm">
-            <h4 class="font-black text-lg">${curso.TipoBaile}</h4>
-            <p>${curso.Nivel}</p>
-            <p>${curso.Descripcion}</p>
+        <div class="border rounded p-4 shadow-sm mb-4">
+            <h4 class="font-black text-lg">${curso.TipoBaile ?? curso.nombre ?? 'Curso'}</h4>
+            <p class="text-sm text-gray-600">${curso.Nivel ?? curso.nivel ?? ''}</p>
+            <p class="text-sm">${curso.Descripcion ?? curso.descripcion ?? ''}</p>
         </div>
     `).join('');
 }
@@ -123,12 +119,32 @@ async function renderBonosList() {
 
     const bonos = await fetchBonos();
 
-    container.innerHTML = bonos.map(bono => `
-        <div class="bg-black text-white p-4 rounded-lg mb-4">
-            <span class="font-bold uppercase">${bono.tipo}</span>
-            <p class="font-black text-xl">${bono.precio} €</p>
+    if (!bonos || bonos.length === 0) {
+        // fallback visual si no hay datos
+        container.innerHTML = `<div class="p-6 text-center text-gray-500">No hay bonos disponibles</div>`;
+        return;
+    }
+
+    container.innerHTML = bonos.map(bono => {
+        const fotoUrl = bono.foto ? (bono.foto.startsWith('http') ? bono.foto : '/antonio-raquel-bachata/' + bono.foto) : 'https://picsum.photos/400/100?grayscale';
+        return `
+        <div class="bg-black text-white p-4 rounded-lg flex justify-between items-center mb-4 relative overflow-hidden group">
+            <img src="${fotoUrl}" class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity">
+            <div class="relative z-10 flex items-center gap-4">
+                <img src="${fotoUrl}" class="rounded w-12 h-12 object-cover border-2 border-white">
+                <div>
+                    <span class="font-bold uppercase text-lg">${bono.tipo ?? bono.Tipo ?? 'Bono'}</span>
+                    <div class="text-xs text-gray-200">${bono.descripcion ? (bono.descripcion.substring(0,80) + (bono.descripcion.length>80?'...':'')) : ''}</div>
+                </div>
+            </div>
+            <div class="relative z-10 text-right">
+                <p class="text-[10px] font-bold text-rose-500 uppercase">Precio</p>
+                <p class="font-black text-xl">${bono.precio ?? bono.Precio ?? '—'}</p>
+                <p class="text-xs text-gray-300">${bono.numDias ?? bono.NumDias ?? ''} días</p>
+            </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // === EVENTOS ===
@@ -138,19 +154,24 @@ async function renderEventosList() {
 
     const eventos = await fetchEventos();
 
+    if (!eventos || eventos.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-gray-500">No hay eventos</div>`;
+        return;
+    }
+
     container.innerHTML = eventos.map(evento => `
         <div class="bg-black text-white p-4 rounded-lg flex justify-between mb-4">
             <div class="flex items-center gap-4">
-                <img src="${evento.URLFoto}" class="rounded w-16 h-12">
-                <span class="font-bold uppercase">${evento.TítuloEvento}</span>
+                <img src="${evento.URLFoto ?? evento.urlFoto ?? 'https://picsum.photos/100/80'}" class="rounded w-16 h-12 object-cover">
+                <span class="font-bold uppercase">${evento.TítuloEvento ?? evento.titulo ?? 'Evento'}</span>
             </div>
-            <p>${evento.FechaEvento}</p>
+            <p>${evento.FechaEvento ?? evento.fecha ?? ''}</p>
         </div>
     `).join('');
 }
 
 /* -------------------------------------
-   3. INICIALIZACIÓN AL CARGAR LA PÁGINA
+   INICIALIZACIÓN AL CARGAR LA PÁGINA
    ------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -162,14 +183,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /* -------------------------------------
-   4. UTILIDADES GENERALES DEL PANEL
+   UTILIDADES
    ------------------------------------- */
 
-// Calendario simple
 function initCalendar() {
     const calendarDays = document.getElementById('calendarDays');
     if (!calendarDays) return;
-
     const daysInMonth = 31;
     calendarDays.innerHTML = Array.from({ length: daysInMonth }, (_, i) =>
         `<button class="px-3 py-2 rounded hover:bg-gray-100">${i + 1}</button>`

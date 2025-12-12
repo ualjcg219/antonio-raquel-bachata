@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Añadir Bono - Admin</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/antonio-raquel-bachata/css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../js/config.js"></script>
+    <script src="/antonio-raquel-bachata/js/config.js"></script>
 </head>
 <body class="bg-white text-gray-900 flex flex-col min-h-screen">
     <header class="bg-black text-white sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <a href="admin-dashboard.html" class="flex items-center gap-2 group">
                 <div class="relative">
-                    <img src="https://raw.githubusercontent.com/ualjcg219/antonio-raquel-bachata/main/images/logo1.png" alt="Logo Antonio y Raquel" class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300">
+                    <img src="https://raw.githubusercontent.com/ualjcg219/antonio-raquel-bachata/main/images/logo1.png" alt="Logo Antonio y Raquel" class="w-10 h-10 object-contain">
                 </div>
                 <div class="flex flex-col leading-none">
                     <span class="text-lg font-bold tracking-widest group-hover:text-rose-600 transition-colors">ANTONIO&RAQUEL</span>
                     <span class="text-xs text-rose-500 font-bold tracking-widest">BACHATA PASSION</span>
                 </div>
             </a>
-            <a href="../visitante/index.html" class="bg-rose-900/30 border border-rose-600 text-rose-500 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-rose-600 hover:text-white transition-colors">Volver a Visitante</a>
+            <a href="/antonio-raquel-bachata/visitante/index.html" class="bg-rose-900/30 border border-rose-600 text-rose-500 px-4 py-2 rounded text-xs font-bold uppercase hover:bg-rose-600 hover:text-white transition-colors">Ir al sitio</a>
         </div>
         <div class="admin-nav-bar">
             <div class="container mx-auto">
@@ -50,39 +50,58 @@
             <h2 class="text-4xl font-black uppercase mb-8 text-center">Añadir Bono</h2>
             <div class="border border-rose-200 p-6 rounded bg-white shadow-lg">
                 <h3 class="font-black uppercase mb-6 text-sm text-gray-500">Edite los datos del bono nuevo</h3>
-                
-                <div class="flex flex-col md:flex-row gap-8 mb-6">
-                    <div class="w-full md:w-1/2 space-y-6">
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Tipo de Bono</label>
-                            <select class="form-input w-full"><option>Semanal</option><option>Mensual</option><option>Individual</option></select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Número de Días</label>
-                            <select class="form-input w-full"><option>5 Días</option><option>3 Días</option></select>
-                        </div>
-                        <div class="flex gap-4">
-                            <div class="w-1/2">
-                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Precio</label>
-                                <input type="text" placeholder="Ej: 70€" class="form-input w-full">
-                            </div>
-                            <div class="w-1/2">
-                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Foto</label>
-                                <input type="file" class="form-input w-full text-xs pt-2">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="w-full md:w-1/2">
-                        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Descripción del bono</label>
-                        <textarea class="form-input w-full h-full min-h-[150px]" placeholder="Descripción detallada..."></textarea>
-                    </div>
-                </div>
 
-                <button class="w-full bg-rose-600 text-white font-black uppercase py-3 rounded hover:bg-rose-700">LISTO!</button>
+                <!-- Mensaje de resultado -->
+                <div id="formMessage" class="hidden mb-4"></div>
+
+                <!-- FORMULARIO -->
+                <form id="bonoForm" class="space-y-6" enctype="multipart/form-data" method="post" action="/antonio-raquel-bachata/api/bonos">
+                    <div class="flex flex-col md:flex-row gap-8 mb-6">
+                        <div class="w-full md:w-1/2 space-y-6">
+                            <div>
+                                <label for="tipo" class="block text-xs font-bold uppercase text-gray-500 mb-1">Tipo de Bono</label>
+                                <select id="tipo" name="tipo" class="form-input w-full" required>
+                                    <option value="">-- Selecciona --</option>
+                                    <option value="Semanal">Semanal</option>
+                                    <option value="Mensual">Mensual</option>
+                                    <option value="Individual">Individual</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="numDias" class="block text-xs font-bold uppercase text-gray-500 mb-1">Número de Días</label>
+                                <select id="numDias" name="numDias" class="form-input w-full" required>
+                                    <option value="">-- Selecciona --</option>
+                                    <option value="5">5</option>
+                                    <option value="3">3</option>
+                                    <option value="2">2</option>
+                                </select>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-1/2">
+                                    <label for="precio" class="block text-xs font-bold uppercase text-gray-500 mb-1">Precio</label>
+                                    <input id="precio" name="precio" type="text" placeholder="Ej: 70.00" class="form-input w-full" required>
+                                </div>
+                                <div class="w-1/2">
+                                    <label for="foto" class="block text-xs font-bold uppercase text-gray-500 mb-1">Foto</label>
+                                    <input id="foto" name="foto" type="file" accept="image/*" class="form-input w-full text-xs pt-2">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-1/2">
+                            <label for="descripcion" class="block text-xs font-bold uppercase text-gray-500 mb-1">Descripción del bono</label>
+                            <textarea id="descripcion" name="descripcion" class="form-input w-full h-full min-h-[150px]" placeholder="Descripción detallada..." required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- type="button" evita que el navegador haga submit normal y nos permite controlar el envío via JS -->
+                    <button type="button" id="submitBonoBtn" class="w-full bg-rose-600 text-white font-black uppercase py-3 rounded hover:bg-rose-700">LISTO!</button>
+                </form>
             </div>
         </main>
     </div>
-    <script src="../js/main.js"></script>
+
+    <script src="/antonio-raquel-bachata/js/main.js"></script>
+    <script src="/antonio-raquel-bachata/js/admin-bonos-anadir.js"></script>
 </body>
 </html>
