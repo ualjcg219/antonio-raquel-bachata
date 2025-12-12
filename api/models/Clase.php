@@ -37,7 +37,7 @@ class Clase {
                   COUNT(r.idReserva) as reservasActuales
                   FROM " . $this->table . " c
                   LEFT JOIN curso cu ON c.baile = cu.TipoBaile AND c.nivel = cu.Nivel
-                  LEFT JOIN reserva r ON c.idClase = r.idReserva
+                  LEFT JOIN reserva r ON c.idClase = r.idClase
                   WHERE c.idClase = ?
                   GROUP BY c.idClase";
         $stmt = $this->conn->prepare($query);
